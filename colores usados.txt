@@ -1,0 +1,7 @@
+#004998 azul oscuri
+#0084b5 azul medio
+#5dbdd3 azul verde
+
+#c3c3c3
+#F2F3F5 gris
+#e5e5e5

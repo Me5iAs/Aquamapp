@@ -1,0 +1,85 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/pedidos" >arrow_back</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Registrar Atención</span>
+  <button mat-icon-button><mat-icon (click)="onRegistrarAtencion(EntregaForm.value)" >check</mat-icon></button>
+  
+  
+</mat-toolbar>
+
+<div class="container" *ngIf="data">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> {{data.Cliente}} </mat-card-title>
+      <mat-card-subtitle *ngIf="data.Direccion" > 
+        {{data.Direccion}} + {{data.Referencia}} 
+        <span (click)="VerMapa(data.Latitud, data.Longitud)" style="cursor: pointer;">
+          (ver mapa 
+          <mat-icon Suffix  >map</mat-icon>
+          )
+        </span>
+        
+      </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="data.Telefono" > {{data.Telefono}} </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="data.Commentario != ' '" > {{data.Comentario}} </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+
+      <form [formGroup]="EntregaForm">
+        
+
+        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+          <mat-icon matPrefix>comment</mat-icon>
+          <mat-label>Comentarios</mat-label>
+          <textarea matInput placeholder="Comentarios" formControlName="Glosa"></textarea>
+        </mat-form-field>
+        
+        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="Cantidad" placeholder="N° de Botellones vendidos">
+              <mat-option *ngFor="let op of Botellones" [value]="op.Cantidad" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+          <mat-select formControlName="Vale" placeholder="Uso de vale">
+            <mat-option *ngFor="let op of Vales" [value]="op.Cantidad" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+          <mat-select formControlName="Garantia" placeholder="Pago de Garantía">
+            <mat-option *ngFor="let op of Garantias" [value]="op.Cantidad" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        
+        <h3>total a pagar:</h3>
+        <h1 style="text-align: center; font-size: 250%; font-weight: bold;">
+          S/ {{
+            data.Precio * EntregaForm.controls.Cantidad.value - 
+            data.Precio * EntregaForm.controls.Vale.value + 
+            EntregaForm.controls.Garantia.value
+            }} 
+        </h1>
+        <mat-checkbox formControlName="EstadoPago">Pagado </mat-checkbox>
+      </form>
+
+
+    </mat-card-content>
+    <mat-card-actions style="text-align: center;">
+      <button mat-raised-button routerLink="/pedidos">Regresar</button>
+      <button mat-raised-button class="aceptar" (click)="onRegistrarAtencion(EntregaForm.value)">Registrar</button>
+    </mat-card-actions>
+     
+  </mat-card>
+</div>

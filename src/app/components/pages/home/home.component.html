@@ -1,0 +1,24 @@
+<mat-toolbar>
+    <span style="flex: 1 1 auto; text-align: center;">AQUAM</span>
+</mat-toolbar>
+
+<div class="container">
+  <div style="text-align: center; margin:15px">
+    <img src="../../../../assets/logo.png" alt="" style="height: 140px;">
+  </div>
+  <mat-card class="card">
+    <mat-card-header>
+      <div mat-card-avatar style="
+      background-size: cover;">
+      <img src="../../../../assets/users.png" alt="" style="height: 40px;">  
+    </div>
+      <mat-card-title>{{userData.Usuario}} </mat-card-title>
+      <mat-card-subtitle>{{userData.Tipo}} </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-actions style="text-align: center;">
+      <!-- <button mat-button routerLink="/profile">Perfil</button> -->
+      <button mat-button (click)="onLogout()" >Cerrar Sesión</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

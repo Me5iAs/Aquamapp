@@ -1,0 +1,46 @@
+<!-- "Info"|"Editar"|"Eliminar"|"Nuevo" -->
+<h1 style="text-align: center;" mat-dialog-title *ngIf="dataMov.Accion=='Info'">Información del Movimiento</h1>
+<h1 style="text-align: center;" mat-dialog-title *ngIf="dataMov.Accion=='Nuevo'">Nuevo Movimiento</h1>
+<div mat-dialog-content>
+  
+    <form [formGroup]="MovimientoForm" style="text-align: center;">
+      <!-- fecha -->
+      <mat-form-field *ngIf="dataMov.Accion=='Nuevo'">
+        <mat-label>Fecha</mat-label>
+        <input readonly="true" matInput [matDatepicker]="picker" formControlName="Fecha">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="dataMov.Accion=='Info'">
+        <input [readonly]="true" type="text" matInput placeholder="Tipo" formControlName="Fecha" >
+      </mat-form-field>
+      <!-- tipo -->
+      <mat-form-field *ngIf="dataMov.Accion=='Info'">
+          <input [readonly]="true" type="text" matInput placeholder="Tipo" formControlName="Tipo" >
+        </mat-form-field>
+      <mat-form-field *ngIf="dataMov.Accion=='Info'">
+        <input [readonly]="true" type="text" matInput placeholder="Categoria" formControlName="Categoria" >
+      </mat-form-field>
+
+      <mat-form-field *ngIf="dataMov.Accion=='Nuevo'">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="IdCat" >
+          <mat-option>-- None --</mat-option>
+          <mat-optgroup *ngFor="let group of dataMov.Categorias" [label]="group.Nombre">
+            <mat-option *ngFor="let tipo of group.Categoria" [value]="tipo.Id">
+              {{tipo.Categoria}}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field><input [readonly]="dataMov.Accion=='Info'" type="text" matInput placeholder="Glosa" formControlName="Glosa" ></mat-form-field>
+      <mat-form-field><input [readonly]="dataMov.Accion=='Info'" type="text" matInput placeholder="Monto" formControlName="Monto" ></mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions style="text-align:center">
+  <button mat-raised-button (click)="onCancel()" [mat-dialog-close]="false" color="warn">Cancelar</button>
+  <button mat-raised-button *ngIf="dataMov.Accion=='Info'" (click)="onDelMov(MovimientoForm.value)" [mat-dialog-close]="true"  style="background:#004998; color: #fff">Del. Movimiento</button>
+  <button mat-raised-button *ngIf="dataMov.Accion=='Nuevo'" (click)="onNewMov(MovimientoForm.value)" [mat-dialog-close]="true" [disabled]="!MovimientoForm.valid" style="background:#004998; color:#fff">Reg. Movimiento</button>
+</div>
+

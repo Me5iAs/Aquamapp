@@ -1,0 +1,77 @@
+<div class=container>
+
+  <div class="subcontainer">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="footer">
+    <table style="width: 100%; text-align: center;">
+      <tr>
+        <!-- Admin -->
+        <td *ngIf="userData.CodTipo !='3'">
+          <button mat-icon-button routerLink="/nuevo_pedido">
+            <mat-icon>phone_callback</mat-icon>
+          </button>      
+        </td>
+        <td>
+          <button mat-icon-button routerLink="/pedidos">
+            <mat-icon>dns</mat-icon>
+          </button>      
+        </td>
+        <td *ngIf="userData.CodTipo !='3'">
+          <button mat-icon-button routerLink="/clientes">
+            <mat-icon>person</mat-icon>
+          </button>      
+        </td>
+        <td>
+          <button mat-icon-button routerLink="/">
+            <mat-icon>home</mat-icon>
+          </button>      
+        </td>
+
+        <td *ngIf="userData.CodTipo =='0' ||userData.CodTipo =='1' ">
+          <button mat-icon-button routerLink="/reportes">
+            <mat-icon>assignment</mat-icon>
+          </button>      
+        </td>
+
+        <!-- <td>
+          <button mat-icon-button routerLink="/vehiculos">
+            <mat-icon>local_shipping</mat-icon>
+          </button>      
+        </td> -->
+
+
+        <td *ngIf="userData.CodTipo =='0' ||userData.CodTipo =='1' ">
+          <button mat-icon-button routerLink="/movimientos">
+            <mat-icon>attach_money</mat-icon>
+          </button>      
+        </td>
+        <td>
+          <button mat-icon-button (click)="onLogout()">
+            <mat-icon>exit_to_app</mat-icon>
+          </button>      
+        </td>        
+        <!-- <td>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>person_pin</mat-icon>
+          </button>  
+          <mat-menu #menu="matMenu">
+            <button routerLink="/profile" mat-menu-item>
+              <mat-icon>person</mat-icon>
+              <span>Mi perfil</span>
+            </button>
+            <button (click)="onLogout()" mat-menu-item>
+              <mat-icon>exit_to_app</mat-icon>
+              <span>LogOut</span>
+            </button>
+          </mat-menu>
+        </td> -->
+
+      </tr>
+    </table>
+
+
+
+  </div>
+</div>
