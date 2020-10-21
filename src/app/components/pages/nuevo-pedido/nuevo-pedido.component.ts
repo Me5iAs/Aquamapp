@@ -87,7 +87,7 @@ export class NuevoPedidoComponent implements OnInit {
     Cliente       : new FormControl("Anónimo", [Validators.required]),
     Cantidad      : new FormControl(10, [Validators.pattern("^[0-9]*$"), Validators.required]),
     Fecha_entrega : new FormControl(new Date(),[Validators.required]),
-    Hora_entrega  : new FormControl("", [Validators.required]),
+    // Hora_entrega  : new FormControl("", [Validators.required]),
     Precio        : new FormControl(2 , [Validators.required]),
     Glosa         : new FormControl(" "),
     
@@ -110,9 +110,12 @@ export class NuevoPedidoComponent implements OnInit {
   }
 
   ngOnInit() {
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+        
     this.gQuery.sql("sp_clientes_devolver").subscribe( data =>{
      
-      
+      target.style.display = "none"      
       for(var x = 0; x<Object.values(data).length; x++){
         this.Clientes.push({
           Id: data[x].Id,
@@ -155,22 +158,35 @@ export class NuevoPedidoComponent implements OnInit {
       return;
     }
 
-
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"    
 
     this.gQuery.sql(
       "sp_pedido_registrar",
       IdCliente[0].Id                              + "|" + 
       UsuarioI.Id                                  + "|" + 
       this.gQuery.fecha_2b(data.Fecha_entrega)     + "|" + 
-      data.Hora_entrega                            + "|" + 
+      // data.Hora_entrega                            + "|" + 
+      "15:30:00"                                   + "|" + 
       data.Cantidad                                + "|" +        
       data.Precio                                  + "|" +        
       data.Glosa
       ).subscribe(res =>{
+        target.style.display = "none"
         if(res[0].Estado==1){
           this._snackBar.open(res[0].message, "ok", {duration: 2000})
           // alert(res[0].message); 
-          this.router.navigate(["/home"]);
+          // this.router.navigate(["/home"]);
+          this.PedidoForm = new FormGroup({
+            Cliente       : new FormControl("Anónimo", [Validators.required]),
+            Cantidad      : new FormControl(10, [Validators.pattern("^[0-9]*$"), Validators.required]),
+            Fecha_entrega : new FormControl(new Date(),[Validators.required]),
+            // Hora_entrega  : new FormControl("", [Validators.required]),
+            Precio        : new FormControl(2 , [Validators.required]),
+            Glosa         : new FormControl(" "),
+            
+          });
+
         }
         
       }

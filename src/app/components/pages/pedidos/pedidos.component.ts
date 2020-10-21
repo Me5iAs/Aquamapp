@@ -58,9 +58,13 @@ export class PedidosComponent implements OnInit {
   }
 
   CargarPedidos(){
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery
     .sql("sp_pedidos_pendientes_devolver")
     .subscribe(data =>{
+      target.style.display = "none"
       if (data==null){
         this.dataSource=null;
       }else{
@@ -100,11 +104,15 @@ export class PedidosComponent implements OnInit {
       return;
     }
 
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
+
     this.gQuery
       .sql("sp_pedido_delete",Id)
       .subscribe(res =>{
         // console.log(res);
-        
+        target.style.display = "none"  
         alert("Pedido eliminado con éxito")
         this.CargarPedidos()
       });

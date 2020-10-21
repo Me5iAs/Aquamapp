@@ -19,8 +19,8 @@ export class AtencionComponent implements OnInit {
     Cantidad      : new FormControl(4, [Validators.required]),
     EstadoPago    : new FormControl(true,[Validators.required]),
     Glosa         : new FormControl(" "),
-    Vale          : new FormControl(0, [Validators.required]),
-    Garantia      : new FormControl(5, [Validators.required]),
+    Vale          : new FormControl(1, [Validators.required]),
+    Garantia      : new FormControl(0, [Validators.required]),
     
   });
 
@@ -61,9 +61,13 @@ export class AtencionComponent implements OnInit {
   }
 
   CargarPedido(){
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
     this.gQuery
     .sql("sp_pedido_devolver", this.rutaActiva.snapshot.params.IdPedido)
     .subscribe(data =>{
+      target.style.display = "none"
       this.data = data[0];
       this.EntregaForm.controls.Cantidad.setValue( Number(data[0].Cantidad));
       
@@ -83,6 +87,9 @@ export class AtencionComponent implements OnInit {
     }else{
       a = 0;
     }
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery.sql(
       "sp_pedido_registrar_entrega",
       this.rutaActiva.snapshot.params.IdPedido  + "|" + 
@@ -93,6 +100,7 @@ export class AtencionComponent implements OnInit {
       data.Vale           + "|" +
       data.Garantia
       ).subscribe(res =>{
+        target.style.display = "none"
         this._snackBar.open(res[0].message, "ok", {duration: 2000})
         // alert(res[0].message);
         if(res[0].Estado==1){

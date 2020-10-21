@@ -37,9 +37,13 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   }
 
   CargarClientes(){
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery
     .sql("sp_clientes_devolver")
     .subscribe(data =>{
+      target.style.display = "none"
       if (data==null){
         this.dataSource=null;
       }else{
@@ -74,10 +78,13 @@ export class ClientesComponent implements OnInit, AfterViewInit {
     if(!confirm("Esta acción eliminará al cliente, desea continuar")) {
       return;
     }
-
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery
       .sql("sp_cliente_delete",event.Id)
       .subscribe(res =>{
+        target.style.display = "none"
         this._snackBar.open("Cliente eliminado con éxito", "ok", {duration: 2000})
         // alert("Cliente eliminado con éxito")
         this.CargarClientes()

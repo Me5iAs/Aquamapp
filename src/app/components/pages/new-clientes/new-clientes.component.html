@@ -47,6 +47,15 @@
           </button>
           
         </mat-form-field>
+        
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="TipoCliente" placeholder="Tipo de Cliente">
+              <mat-option  [value]="0">Bodega</mat-option>
+              <mat-option  [value]="1">Delivery</mat-option>
+            </mat-select>
+        </mat-form-field>
+
         <label class="custom-file-upload" style="margin-top:10px; cursor:default">
           <mat-icon>map</mat-icon>
           Marque la dirección del cliente:

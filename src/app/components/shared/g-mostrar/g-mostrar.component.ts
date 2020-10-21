@@ -35,18 +35,26 @@ export class GMostrarComponent implements OnInit {
       this.displayedColumns= this.gTablaData.Columnas;
     
       if(this.gTablaData.Datos || this.gTablaData.Datos!=""){
+        var target = document.getElementById('cargando_principal');
+        target.style.display = "block"
+        
         this.gQuery
         .sql(this.gTablaData.Procedimiento, this.gTablaData.Datos)
         .subscribe(data =>{
+          target.style.display = "none"
           this.dataSource= new MatTableDataSource(<any> data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         });
         this.dataSource.sort = this.sort;    
       }else{
+        var target = document.getElementById('cargando_principal');
+        target.style.display = "block"
+        
         this.gQuery
         .sql(this.gTablaData.Procedimiento)
         .subscribe(data =>{
+          target.style.display = "none"
           this.dataSource= new MatTableDataSource(<any> data);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

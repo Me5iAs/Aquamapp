@@ -52,9 +52,13 @@ export class EditUserComponent implements OnInit {
     });
     this.LatAct=-3.7722102000000004;
     this.LngAct=-73.26553229999999;
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery
     .sql("sp_cliente_devolver", this.rutaActiva.snapshot.params.IdCli )
     .subscribe(data =>{
+      target.style.display = "none"
       this.ClienteForm.controls.Nombre.setValue(data[0].Nombre);
       this.ClienteForm.controls.DNI.setValue(data[0].DNI);
       this.ClienteForm.controls.Direccion.setValue(data[0].Direccion);
@@ -123,6 +127,9 @@ export class EditUserComponent implements OnInit {
 
 var a  = data.Posicion;
 a = a.split(",");
+var target = document.getElementById('cargando_principal');
+target.style.display = "block"
+
     this.gQuery.sql(
       "sp_cliente_update",
       this.rutaActiva.snapshot.params.IdCli            + "|" + 
@@ -134,26 +141,31 @@ a = a.split(",");
       a[0]                + "|" + 
       a[1]
       ).subscribe(res =>{
+        
         if(res[0].Estado==1){
           // alert(res[0].message);
           if(this.File){
             this.enviandoImagen.postFileImagen(this.File,this.rutaActiva.snapshot.params.IdCli).subscribe(
               response => {
+                target.style.display = "none"
                 this._snackBar.open(res[0].message, "ok", {duration: 2000})
                 // alert(res[0].message);
                 this.router.navigate(["/clientes"]);
               },
               error => {
+                target.style.display = "none"
                 console.log(error);
               }
             )
           }else{
             // alert(res[0].message);
+            target.style.display = "none"
             this._snackBar.open(res[0].message, "ok", {duration: 2000})
             this.router.navigate(["/clientes"]);
           }
         }else{
           // alert(res[0].message);
+          target.style.display = "none"
           this._snackBar.open(res[0].message, "ok", {duration: 2000})
         }
       }

@@ -4,10 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "c:\\AppServ\\www"
-		},
-		{
-			"path": "..\\aquam\\src\\app"
+			"path": "C:\\AppServ\\www\\aquamapp"
 		}
 	],
 	"settings": {}

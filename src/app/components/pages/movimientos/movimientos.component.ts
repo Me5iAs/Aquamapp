@@ -49,11 +49,14 @@ export class movimientosComponent implements OnInit {
        
       
   cargar_ig(){
+  var target = document.getElementById('cargando_principal');
+  target.style.display = "block"
+
    this.gQuery
     .sql("sp_mov_devolver", this.gQuery.fecha_2b(this.Desde) + "|" + this.gQuery.fecha_2b(this.Hasta) )
     .subscribe(data =>{
       // console.log(data);
-      
+      target.style.display = "none"    
       if(data){
         this.dataSource= new MatTableDataSource(<any> data);
         this.dataSource.paginator = this.paginator;
@@ -83,10 +86,13 @@ export class movimientosComponent implements OnInit {
     this.cargar_ig();
 
     // Cargar categorias
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery
     .sql("sp_mov_cat_devolver","2")
     .subscribe(data =>{      
-    
+      target.style.display = "none"    
       if(data ==null) return;
 
       var datos:any = data;
@@ -196,10 +202,14 @@ export class Dialogmovimientos implements OnInit{
   }
 
   onDelMov(data: movimientoI){
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
     this.gQuery.sql(
       "sp_mov_delete",
       this.dataMov.Id).subscribe(res =>{
         // alert(res[0].Message);
+        target.style.display = "none"
         this._snackBar.open(res[0].message, "ok", {duration: 2000})
         this.dialogRef.close(true);
     });
@@ -208,7 +218,10 @@ export class Dialogmovimientos implements OnInit{
   onNewMov(data:movimientoI){
     let sFecha = new Date(data.Fecha);
     let dFecha = sFecha.toISOString().split('T')[0];   
-    
+
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+        
     this.gQuery.sql(
       "sp_mov_registrar",
       dFecha      + "|" + 
@@ -218,6 +231,7 @@ export class Dialogmovimientos implements OnInit{
       JSON.parse(sessionStorage.dataUser).Id 
             + "|"  
       ).subscribe(res =>{
+        target.style.display = "none"
         this._snackBar.open(res[0].message, "ok", {duration: 2000})
         // alert(res[0].Message);
         if(res[0].Estado==1){

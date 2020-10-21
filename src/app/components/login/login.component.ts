@@ -13,9 +13,16 @@ export class LoginComponent implements OnInit {
   public Usuarios;
 
   constructor(public auth:AuthService, private gQuery:gQueryService, private route:Router) { 
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
+    
+
     this.gQuery.sql("sp_usuarios_devolver")
     .subscribe(data =>{
+      target.style.display = "none"
       this.Usuarios = data;
+      
       console.log(this.Usuarios);
       
     }) 

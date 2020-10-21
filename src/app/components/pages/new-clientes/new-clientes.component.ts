@@ -42,7 +42,8 @@ export class NewClientesComponent implements OnInit {
     Referencia: new FormControl("", [Validators.required]),
     Posicion  : new FormControl("" , [Validators.required]),
     Telefono  : new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(6)]),
-    Foto      : new FormControl("")
+    Foto      : new FormControl(""),
+    TipoCliente: new FormControl(0)
   });
 
   // CARGA INICIAL
@@ -125,6 +126,10 @@ export class NewClientesComponent implements OnInit {
     a = a.split(",");
     // console.log(a);
     var userData: UsuarioI = JSON.parse(sessionStorage.getItem("dataUser"));
+
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery.sql(
       "sp_cliente_registrar",
       data.Nombre         + "|" + 
@@ -134,12 +139,15 @@ export class NewClientesComponent implements OnInit {
       data.Telefono       + "|" +        
       a[0]                + "|" + 
       a[1]                + "|" +
-      userData.Id
+      userData.Id         + "|" +
+      data.TipoCliente
       ).subscribe(res =>{
+        target.style.display = "none"
         if(res[0].Estado==1){
           if(this.File){
             this.enviandoImagen.postFileImagen(this.File, res[0].Id).subscribe(
               response => {
+                target.style.display = "none"
                 response = response; 
                 if(response <= 1){
                   this._snackBar.open("Error subiendo imagen al servidor", "ok", {duration: 2000})
@@ -149,6 +157,7 @@ export class NewClientesComponent implements OnInit {
                 }
               },
               error => {
+                target.style.display = "none"
                 console.log(error);   
                 // alert(<any>error);
                 this._snackBar.open("Error", "ok", {duration: 2000})
@@ -156,6 +165,7 @@ export class NewClientesComponent implements OnInit {
             )
           }else{
             // alert(res[0].message);
+            target.style.display = "none"
             this._snackBar.open(res[0].message, "ok", {duration: 2000})
             this.router.navigate(["/clientes"]);
           }

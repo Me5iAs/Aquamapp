@@ -33,7 +33,9 @@ export class GBuscarComponent implements OnInit {
 
   onBuscar() {
     this.mostrar = true;
-
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+    
     this.gQuery
     .buscar(
       this.data.Tabla,
@@ -42,6 +44,7 @@ export class GBuscarComponent implements OnInit {
       this.data.Valor
       )
     .subscribe(data =>{
+      target.style.display = "none"
       this.dataSource= new MatTableDataSource(<any> data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // const url_api = "http://192.168.1.42/subirArchivo.php";
-const url_api = "http://localhost/subirArchivo.php";
-// const url_api = "backend/subirArchivo.php";
+// const url_api = "http://localhost/aquamapp/subirArchivo.php";
+const url_api = "backend/subirArchivo.php";
 
 @Injectable({
   providedIn: 'root'

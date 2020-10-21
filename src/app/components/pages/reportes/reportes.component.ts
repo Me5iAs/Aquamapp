@@ -30,9 +30,13 @@ export class ReportesComponent implements OnInit, AfterViewInit {
   }
 
   CargarReporte(){
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
     this.gQuery
     .sql("rpt_proyeccion_cliente")
     .subscribe(data =>{
+      target.style.display = "none"
       if (data==null){
         this.dataSource=null;
       }else{
