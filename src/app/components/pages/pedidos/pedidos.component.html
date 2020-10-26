@@ -10,13 +10,15 @@
 <div class="container" >
   <mat-card [class.oculto]="dataSource==null">
     <mat-card-content >
-      <mat-form-field style="width: 85%">
+      <mat-form-field style="width: 75%">
         <mat-label>Buscar clientes</mat-label>
         <mat-icon matPrefix>person</mat-icon>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juan Perez">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
-      <button></button>
+      <a mat-raised-button matSuffix href='/#/ver_pedidos_map' style="margin-left:10px">
+        <mat-icon>pin_drop</mat-icon>
+      </a>
 
       <table mat-table [dataSource]="dataSource" style="width:100%" matSort>
               
@@ -46,7 +48,7 @@
     </mat-card-content>
 
     <mat-card-footer>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="50" showFirstLastButtons></mat-paginator>
       
       
       

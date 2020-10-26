@@ -116,6 +116,7 @@ export class PedidosComponent implements OnInit {
         alert("Pedido eliminado con éxito")
         this.CargarPedidos()
       });
-  }   
+  }
+  
 }
 

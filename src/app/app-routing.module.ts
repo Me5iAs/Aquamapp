@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'atencion:/IdPedido', loadChildren: () => import('./components/pages/atencion/atencion.module').then(m => m.AtencionModule) },
   { path: 'vehiculos', loadChildren: () => import('./components/pages/vehiculos/vehiculos.module').then(m => m.VehiculosModule) },
   { path: 'reportes', loadChildren: () => import('./components/pages/reportes/reportes.module').then(m => m.ReportesModule) },
-  { path: 'ver_pedidos_map', loadChildren: () => import('./components/pages/ver-pedidos-map/ver-pedidos-map.module').then(m => m.VerPedidosMapModule) }
+  { path: 'ver_pedidos_map', loadChildren: () => import('./components/pages/ver-pedidos-map/ver-pedidos-map.module').then(m => m.VerPedidosMapModule) },
+  { path: 'pos_clientes', loadChildren: () => import('./components/pages/posicion-clientes/posicion-clientes.module').then(m => m.PosicionClientesModule) }
 ];
 
 @NgModule({

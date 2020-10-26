@@ -5,17 +5,16 @@ import {Router} from "@angular/router";
 import {MatSnackBar} from '@angular/material/snack-bar'
 
 @Component({
-  selector: 'app-ver-pedidos-map',
-  templateUrl: './ver-pedidos-map.component.html',
-  styleUrls: ['./ver-pedidos-map.component.css']
+  selector: 'app-posicion-clientes',
+  templateUrl: './posicion-clientes.component.html',
+  styleUrls: ['./posicion-clientes.component.css']
 })
-export class VerPedidosMapComponent implements OnInit {
+export class PosicionClientesComponent implements OnInit {
   public longitud; 
   public latitud; 
   public LatAct = null;
   public LngAct = null;
   public markers = [];
-
   @ViewChild(AgmMap) public agmMap: AgmMap
 
   constructor(private gQuery:gQueryService, private router:Router, private _snackBar: MatSnackBar) { }
@@ -34,7 +33,7 @@ export class VerPedidosMapComponent implements OnInit {
     target.style.display = "block"
     
     this.gQuery
-    .sql("sp_pedidos_pendientes_devolver")
+    .sql("sp_clientes_devolver_pos")
     .subscribe(data =>{
       target.style.display = "none"
       if(data ==null) return;
@@ -45,8 +44,8 @@ export class VerPedidosMapComponent implements OnInit {
         this.markers.push({
           latitud: datos[x].Latitud,
           longitud: datos[x].Longitud,
-          label: datos[x].Cliente,
-          datos : datos[x].Cliente + " - "  + datos[x].Direccion + " - " + datos[x].Referencia
+          label: datos[x].Nombre,
+          datos : datos[x].Nombre + " - "  + datos[x].Direccion + " - " + datos[x].Referencia
         })
       }
       console.log(this.markers);
@@ -60,4 +59,5 @@ export class VerPedidosMapComponent implements OnInit {
   verInfo(id){
     this._snackBar.open(this.markers[id].datos, "ok", {duration: 10000})
   }
+
 }

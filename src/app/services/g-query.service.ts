@@ -4,8 +4,8 @@ import {map} from "rxjs/operators/";
 
 
 // const url_api = "http://192.168.1.42/gQuery.php";
-const url_api = "http://localhost/aquamapp/gQuery.php";
-// const url_api = "backend/gQuery.php";
+// const url_api = "http://localhost/aquamapp/gQuery.php";
+const url_api = "backend/gQuery.php";
 // data.datos = data.datos.replace(/"/gi,"");
 // data.datos = data.datos.replace(/'/gi,"");
 

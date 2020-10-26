@@ -143,7 +143,7 @@ export class NuevoPedidoComponent implements OnInit {
     console.log(data.Cliente);
     
     var IdCliente = this.Clientes.filter( op => op.Nombre == data.Cliente );
-    console.log(IdCliente);
+    // console.log(IdCliente);
     
     var UsuarioI = JSON.parse(sessionStorage.getItem("dataUser"));
     if(!this.PedidoForm.valid){
@@ -177,15 +177,12 @@ export class NuevoPedidoComponent implements OnInit {
           this._snackBar.open(res[0].message, "ok", {duration: 2000})
           // alert(res[0].message); 
           // this.router.navigate(["/home"]);
-          this.PedidoForm = new FormGroup({
-            Cliente       : new FormControl("Anónimo", [Validators.required]),
-            Cantidad      : new FormControl(10, [Validators.pattern("^[0-9]*$"), Validators.required]),
-            Fecha_entrega : new FormControl(new Date(),[Validators.required]),
-            // Hora_entrega  : new FormControl("", [Validators.required]),
-            Precio        : new FormControl(2 , [Validators.required]),
-            Glosa         : new FormControl(" "),
-            
-          });
+          this.PedidoForm.controls.Cliente.setValue("Anónimo");
+          this.PedidoForm.controls.Cantidad.setValue(10);
+          this.PedidoForm.controls.Fecha_entrega.setValue(new Date());
+          this.PedidoForm.controls.Precio.setValue(2);
+          this.PedidoForm.controls.Glosa.setValue("");
+
 
         }
         
@@ -197,5 +194,11 @@ export class NuevoPedidoComponent implements OnInit {
     onCancelar(){
       this.router.navigate(["/pedidos"]);
     }
+    onFocusEvent(event: any){
+      this.PedidoForm.controls.Cliente.setValue("");
+      
+
+      
+   }
 }
 

@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { VerPedidosMapRoutingModule } from './ver-pedidos-map-routing.module';
-import { VerPedidosMapComponent } from './ver-pedidos-map.component';
+import { PosicionClientesRoutingModule } from './posicion-clientes-routing.module';
+import { PosicionClientesComponent } from './posicion-clientes.component';
 import { AgmCoreModule } from '@agm/core';
 import {MaterialModule} from "../../../material.module";
 
 @NgModule({
-  declarations: [VerPedidosMapComponent],
+  declarations: [PosicionClientesComponent],
   imports: [
     CommonModule,
+    PosicionClientesRoutingModule,
     MaterialModule,
-    VerPedidosMapRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyA8d0CD3InmjRc4R8GX3mf6ByuebwPwJUo',
       libraries: ['places']
     })
   ]
 })
-export class VerPedidosMapModule { }
+export class PosicionClientesModule { }
