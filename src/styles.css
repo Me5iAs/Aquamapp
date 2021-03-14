@@ -3,9 +3,16 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .aceptar{
-  background: #004998 !important;
-  color: #fff !important;
+  background: #004998 ;
+  color: #fff ;
 }
+.aceptar:disabled,
+.aceptar[disabled]{
+  background-color: rgba(0,0,0,.12);
+  /* background: rgba(151, 142, 142, 0.12); */
+}
+
+
 
 .cargando_oculto{
   width: 100%; 

@@ -6,6 +6,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatDialog} from '@angular/material/dialog';
 import {clienteI} from "../../../models/cliente.interface"
 import {MatSnackBar} from '@angular/material/snack-bar'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reportes',
@@ -14,14 +15,15 @@ import {MatSnackBar} from '@angular/material/snack-bar'
 })
 export class ReportesComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['Nombre', 'n_botellones','ultimo_pedido',  'Prox_pedido', 'Estado'];
+  displayedColumns: string[] = ['Nombre', 'n_botellones','ultimo_pedido', 'Prox_pedido', 'Pos', 'Estado'];
+  // displayedColumns: string[] = ['Nombre', 'n_botellones','ultimo_pedido',  'Prox_pedido', 'Estado'];
   dataSource = new MatTableDataSource();  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   public cliN:clienteI;
-  constructor(public gQuery:gQueryService,public dialog: MatDialog, private _snackBar: MatSnackBar) {
+  constructor(public gQuery:gQueryService,public dialog: MatDialog, private router:Router, private _snackBar: MatSnackBar) {
   }
 
   
@@ -61,6 +63,9 @@ export class ReportesComponent implements OnInit, AfterViewInit {
     }
   }
 
- 
+  onPosCliente(event){
+  
+    this.router.navigate(["/pos_cli/" + event.Id + "/" + event.Nombre]);
+  }   
 }
 

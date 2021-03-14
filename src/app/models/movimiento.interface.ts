@@ -4,6 +4,7 @@ export interface movimientoI {
   Fecha: Date;
   Usuario: string;
   IdCat:string;
+  IdRef:string;
   Categoria: string;
   Glosa: string;
   Tipo: string;

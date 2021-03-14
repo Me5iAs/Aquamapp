@@ -37,6 +37,33 @@
           <input type="text" matInput placeholder="Referencia" formControlName="Referencia" >
         </mat-form-field>
 
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="TipoCliente" placeholder="Tipo de Cliente">
+              <mat-option  [value]="0">Bodega</mat-option>
+              <mat-option  [value]="1">Delivery</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>battery_full</mat-icon>
+            <mat-select formControlName="Botellones" placeholder="Botellones prestados">
+              <mat-option *ngFor="let op of Botellones" [value]="op.Cantidad" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>attach_money</mat-icon>
+            <mat-select formControlName="Precio" placeholder="Precio">
+              <mat-option *ngFor="let op of Precios" [value]="op.Valor" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+
+        </mat-form-field>
+
         <mat-form-field>
           <mat-icon matPrefix>place</mat-icon>
           <input type="text" matInput placeholder="Posición" readonly formControlName="Posicion" >

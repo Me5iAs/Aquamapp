@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import {gQueryService} from "../../../services/g-query.service";
 import { AgmMap } from '@agm/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from '@angular/material/snack-bar'
 
 @Component({
@@ -18,7 +18,7 @@ export class VerPedidosMapComponent implements OnInit {
 
   @ViewChild(AgmMap) public agmMap: AgmMap
 
-  constructor(private gQuery:gQueryService, private router:Router, private _snackBar: MatSnackBar) { }
+  constructor(private gQuery:gQueryService, private router:Router, private rutaActiva: ActivatedRoute, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
     // navigator.geolocation.getCurrentPosition(position => {
@@ -34,7 +34,7 @@ export class VerPedidosMapComponent implements OnInit {
     target.style.display = "block"
     
     this.gQuery
-    .sql("sp_pedidos_pendientes_devolver")
+    .sql("sp_pedidos_pendientes_devolver", this.rutaActiva.snapshot.params.Estado )
     .subscribe(data =>{
       target.style.display = "none"
       if(data ==null) return;

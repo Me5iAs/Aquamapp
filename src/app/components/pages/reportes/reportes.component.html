@@ -57,6 +57,16 @@
             <span class="SubTituloGr" style="font-size:16pt; text-align: center;">{{element.Prox_pedido.split("/")[0] }} </span> 
           </td>
         </ng-container>
+        <ng-container matColumnDef="Pos">
+          <th mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
+          <td mat-cell *matCellDef="let element" class="cel" > 
+            <button mat-icon-button (click)="onPosCliente(element)">
+              <mat-icon class="mat-18">person_search</mat-icon>
+          </button>
+            
+          </td>
+          
+        </ng-container>
 
         <ng-container matColumnDef="Estado">
           <th mat-header-cell *matHeaderCellDef  mat-sort-header>  </th>

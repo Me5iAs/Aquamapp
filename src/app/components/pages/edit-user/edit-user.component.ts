@@ -20,6 +20,9 @@ export class EditUserComponent implements OnInit {
   public longitud;  
   public LatAct = null;
   public LngAct = null;
+  public Botellones;
+  public Precios;
+
   @ViewChild(AgmMap) public agmMap: AgmMap
 
   constructor(
@@ -28,6 +31,26 @@ export class EditUserComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private rutaActiva: ActivatedRoute,
     private enviandoImagen:SubirService) {
+
+      this.Precios = [
+        {Valor: 2, Texto: "S/ 2.00"},
+        {Valor: 2.5, Texto: "S/ 2.50"},
+        {Valor: 3, Texto: "S/ 3.00"},
+        {Valor: 3.5, Texto: "S/ 3.50"},
+        {Valor: 4, Texto: "S/ 4.00"}
+      ]
+
+      this.Botellones = [
+        {Cantidad: 0, Texto: "Sin Botellones"},
+        {Cantidad: 1, Texto: "1 Botellón"}
+      ]
+  
+      for (var x=2; x<=30; x++){
+        this.Botellones.push({
+          Cantidad : x,
+          Texto : x + " Botellones"
+        })
+      }
   }
 
   // formulario de nuevo cliente
@@ -38,7 +61,10 @@ export class EditUserComponent implements OnInit {
     Referencia: new FormControl("", [Validators.required]),
     Posicion  : new FormControl("" , [Validators.required]),
     Telefono  : new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(6)]),
-    Foto      : new FormControl("", [Validators.required])
+    Foto      : new FormControl("", [Validators.required]),
+    TipoCliente: new FormControl("", [Validators.required]),
+    Botellones: new FormControl("", [Validators.required]),
+    Precio: new FormControl("", [Validators.required])
   });
 
   // CARGA INICIAL
@@ -65,6 +91,12 @@ export class EditUserComponent implements OnInit {
       this.ClienteForm.controls.Referencia.setValue(data[0].Referencia);
       this.ClienteForm.controls.Posicion.setValue(data[0].Latitud + ", " + data[0].Longitud );
       this.ClienteForm.controls.Telefono.setValue(data[0].Telefono);
+      this.ClienteForm.controls.TipoCliente.setValue(Number(data[0].TipoCliente));
+      this.ClienteForm.controls.Botellones.setValue(Number(data[0].Botellones));
+      this.ClienteForm.controls.Precio.setValue(Number(data[0].Precio));
+      
+      console.log(data[0].Precio);
+      
   // 
       // this.imageUrl = "http://localhost/backend/imagenes/" + data[0].Id;
       this.imageUrl = "backend/imagenes/" + data[0].Id;
@@ -124,22 +156,24 @@ export class EditUserComponent implements OnInit {
   }
   onUpdateCliente(data){
     
-
-var a  = data.Posicion;
-a = a.split(",");
-var target = document.getElementById('cargando_principal');
-target.style.display = "block"
+    var a  = data.Posicion;
+    a = a.split(",");
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
 
     this.gQuery.sql(
       "sp_cliente_update",
-      this.rutaActiva.snapshot.params.IdCli            + "|" + 
+      this.rutaActiva.snapshot.params.IdCli + "|" + 
       data.Nombre         + "|" + 
       data.DNI            + "|" + 
       data.Direccion      + "|" + 
       data.Referencia     + "|" + 
       data.Telefono       + "|" +        
       a[0]                + "|" + 
-      a[1]
+      a[1]                + "|" +
+      data.TipoCliente    + "|" +
+      data.Botellones     + "|" +
+      data.Precio
       ).subscribe(res =>{
         
         if(res[0].Estado==1){
@@ -174,8 +208,8 @@ target.style.display = "block"
   }
 
 
-    onCancelar(){
-      this.router.navigate(["/clientes"]);
-    }
+  onCancelar(){
+    this.router.navigate(["/clientes"]);
+  }
 }
 

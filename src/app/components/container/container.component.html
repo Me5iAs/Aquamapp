@@ -7,32 +7,88 @@
   <div class="footer">
     <table style="width: 100%; text-align: center;">
       <tr>
-        <!-- Admin -->
-        <td *ngIf="userData.CodTipo !='3'">
+        <!-- produccion -->
+        <!-- <td *ngIf="userData.CodTipo =='4' ||  userData.CodTipo =='0'">
+          <button mat-icon-button routerLink="/prod">
+            <mat-icon>battery_full</mat-icon>
+          </button>      
+        </td> -->
+        <!-- nuevo pedido -->
+        <td *ngIf="userData.CodTipo =='1' || userData.CodTipo =='2' || userData.CodTipo =='0'">
           <button mat-icon-button routerLink="/nuevo_pedido">
             <mat-icon>phone_callback</mat-icon>
           </button>      
         </td>
-        <td>
+
+        <!-- enviar pedidos -->
+        <td *ngIf="
+        userData.CodTipo =='1' || 
+        userData.CodTipo =='0' 
+        ">
           <button mat-icon-button routerLink="/pedidos">
+            <mat-icon>local_shipping</mat-icon>
+            <!-- <mat-icon>local_shipping</mat-icon> -->
+          </button>      
+        </td>
+
+        <!-- registrar entrega -->
+        <!-- <td *ngIf="
+        userData.CodTipo =='3' || 
+        userData.CodTipo =='1' || 
+        userData.CodTipo =='0' 
+        ">
+          <button mat-icon-button routerLink="/entrega">
+            <mat-icon>store</mat-icon>
+          </button>      
+        </td> -->
+
+        <!-- entregar y rendir (temporal hasta conseguir a alguien que lo haga funcionar) -->
+        <td *ngIf="
+        userData.CodTipo =='1' || 
+        userData.CodTipo =='0' 
+        ">
+          <button mat-icon-button routerLink="/entregar_r">
             <mat-icon>dns</mat-icon>
           </button>      
         </td>
-        <td *ngIf="userData.CodTipo !='3'">
+
+        <!-- rendir -->
+        <!-- <td *ngIf="
+        userData.CodTipo =='1' || 
+        userData.CodTipo =='0' 
+        ">
+          <button mat-icon-button routerLink="/rendir">
+            <mat-icon>dns</mat-icon>
+          </button>      
+        </td> -->
+
+        <!-- clientes -->
+        <td *ngIf="
+        userData.CodTipo =='1' || 
+        userData.CodTipo =='0' ||
+        userData.CodTipo =='2'
+        ">
           <button mat-icon-button routerLink="/clientes">
             <mat-icon>person</mat-icon>
           </button>      
         </td>
-        <td>
+        <!-- <td>
           <button mat-icon-button routerLink="/">
             <mat-icon>home</mat-icon>
           </button>      
-        </td>
+        </td> -->
 
-        <td *ngIf="userData.CodTipo !='3'">
-          <button mat-icon-button routerLink="/reportes">
+        <td *ngIf="
+        userData.CodTipo =='1' || 
+        userData.CodTipo =='0' ||
+        userData.CodTipo =='2'
+        ">
+          <!-- <button mat-icon-button routerLink="/reportes">
             <mat-icon>assignment</mat-icon>
-          </button>      
+          </button>       -->
+          <button mat-icon-button routerLink="/reports">
+            <mat-icon>assignment</mat-icon>
+          </button> 
         </td>
 
         <!-- <td>
@@ -41,12 +97,14 @@
           </button>      
         </td> -->
 
-
+        <!-- dinero -->
         <td *ngIf="userData.CodTipo =='0' ||userData.CodTipo =='1' ">
           <button mat-icon-button routerLink="/movimientos">
             <mat-icon>attach_money</mat-icon>
           </button>      
         </td>
+
+        <!-- cerrar -->
         <td>
           <button mat-icon-button (click)="onLogout()">
             <mat-icon>exit_to_app</mat-icon>
@@ -54,12 +112,12 @@
         </td>        
         <!-- <td>
           <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>person_pin</mat-icon>
+            <mat-icon>menu</mat-icon>
           </button>  
           <mat-menu #menu="matMenu">
             <button routerLink="/profile" mat-menu-item>
               <mat-icon>person</mat-icon>
-              <span>Mi perfil</span>
+              <span>Clientes</span>
             </button>
             <button (click)="onLogout()" mat-menu-item>
               <mat-icon>exit_to_app</mat-icon>

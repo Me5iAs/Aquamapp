@@ -1,6 +1,6 @@
 <mat-toolbar>
   <!-- <mat-icon>verified_user</mat-icon> -->
-  <button mat-icon-button><mat-icon routerLink="/pedidos" >arrow_back</mat-icon></button>
+  <button mat-icon-button><mat-icon routerLink="/entrega" >arrow_back</mat-icon></button>
   <span style="flex: 1 1 auto; text-align: center;">Registrar Atención</span>
   <button mat-icon-button><mat-icon (click)="onRegistrarAtencion(EntregaForm.value)" >check</mat-icon></button>
   
@@ -28,13 +28,13 @@
       <form [formGroup]="EntregaForm">
         
 
-        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+        <!-- <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
           <mat-icon matPrefix>comment</mat-icon>
           <mat-label>Comentarios</mat-label>
           <textarea matInput placeholder="Comentarios" formControlName="Glosa"></textarea>
-        </mat-form-field>
+        </mat-form-field> -->
         
-        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+        <mat-form-field style="width: 45%; max-width: 500px; min-width: 150px;">
           <mat-icon matPrefix>signal_cellular_alt</mat-icon>
             <mat-select formControlName="Cantidad" placeholder="N° de Botellones vendidos">
               <mat-option *ngFor="let op of Botellones" [value]="op.Cantidad" >
@@ -43,7 +43,7 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field style="width: 100%; max-width: 500px; min-width: 150px;">
+        <mat-form-field style="width: 45%; float:right; max-width: 500px; min-width: 150px;">
           <mat-icon matPrefix>signal_cellular_alt</mat-icon>
           <mat-select formControlName="Vale" placeholder="Uso de vale">
             <mat-option *ngFor="let op of Vales" [value]="op.Cantidad" >

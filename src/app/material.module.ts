@@ -25,6 +25,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 const myModule = [
   MatCardModule,
@@ -51,7 +52,8 @@ const myModule = [
   MatTooltipModule,
   MatExpansionModule,
   MatAutocompleteModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatSlideToggleModule
 ]
 
 @NgModule({

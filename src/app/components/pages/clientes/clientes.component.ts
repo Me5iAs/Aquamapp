@@ -8,6 +8,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatDialog} from '@angular/material/dialog';
 import {clienteI} from "../../../models/cliente.interface"
 import {MatSnackBar} from '@angular/material/snack-bar'
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,14 +22,18 @@ import {MatSnackBar} from '@angular/material/snack-bar'
 })
 export class ClientesComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['Clientes', 'Del'];
+  displayedColumns: string[] = ['Clientes', 'Pos','Del'];
   dataSource = new MatTableDataSource();  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   public cliN:clienteI;
-  constructor(private gQuery:gQueryService,public dialog: MatDialog, private _snackBar: MatSnackBar) {
+  constructor(
+    private gQuery:gQueryService,
+    public dialog: MatDialog, 
+    private router:Router, 
+    private _snackBar: MatSnackBar) {
   }
 
   
@@ -89,6 +94,11 @@ export class ClientesComponent implements OnInit, AfterViewInit {
         // alert("Cliente eliminado con éxito")
         this.CargarClientes()
       });
+  }  
+  
+  onPosCliente(event){
+  
+    this.router.navigate(["/pos_cli/" + event.Id + "/" + event.Nombre]);
   }   
 }
 

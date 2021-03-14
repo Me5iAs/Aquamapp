@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {map} from "rxjs/operators/";
+import {map, retry} from "rxjs/operators/";
 
 
 // const url_api = "http://192.168.1.42/gQuery.php";
-// const url_api = "http://localhost/aquamapp/gQuery.php";
-const url_api = "backend/gQuery.php";
+const url_api = "http://localhost/aquamapp/gQuery.php";
+// const url_api = "backend/gQuery.php";
 // data.datos = data.datos.replace(/"/gi,"");
 // data.datos = data.datos.replace(/'/gi,"");
 
@@ -25,7 +25,13 @@ export class gQueryService {
   
   sql(procedimiento:string, datos?:string){
     return this.http.post(url_api, {name:procedimiento, datos: datos},
-      {headers: Cabecera}).pipe(map(data=>data));
+      {headers: Cabecera})
+      .pipe(
+        map(data=>data), 
+        retry(3) // retry a failed request up to 3 times
+      // catchError(this.) // then handle the error
+        
+      );
   }
 
   buscar(tabla:string, campos:string, criterio:string, valor:string){
@@ -60,6 +66,8 @@ export class gQueryService {
 
 
   parte_fecha(fecha:string, tipo){
+    // console.log(fecha);
+    
     // D:dia completo, d:dia abreviado, M:mes completo, m:mes abreviado
     // fecha: 18/10/2020
     let fechaA = fecha.split("/");

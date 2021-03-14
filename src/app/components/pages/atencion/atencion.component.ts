@@ -27,13 +27,13 @@ export class AtencionComponent implements OnInit {
   
   constructor(private gQuery:gQueryService, private router:Router, private rutaActiva: ActivatedRoute, private _snackBar: MatSnackBar) {
     this.Botellones = [
-      {Cantidad: 1, Texto: "1 Botellón"},
+      {Cantidad: 1, Texto: "1 Bot"},
     ]
 
     for (var x=2; x<=30; x++){
       this.Botellones.push({
         Cantidad : x,
-        Texto : x + " Botellones"
+        Texto : x + " Bot"
       })
     }
 
@@ -47,10 +47,10 @@ export class AtencionComponent implements OnInit {
 
     this.Vales = [
       {Cantidad: 0, Texto: "Sin vales"},
-      {Cantidad: 1, Texto: "Vale por 1 botellón"},
-      {Cantidad: 2, Texto: "Vale por 2 botellones"},
-      {Cantidad: 3, Texto: "Vale por 3 botellones"},
-      {Cantidad: 4, Texto: "Vale por 4 botellones"}
+      {Cantidad: 1, Texto: "Vale por 1 bot"},
+      {Cantidad: 2, Texto: "Vale por 2 bot"},
+      {Cantidad: 3, Texto: "Vale por 3 bot"},
+      {Cantidad: 4, Texto: "Vale por 4 bot"}
     ]
     
   }
@@ -96,7 +96,6 @@ export class AtencionComponent implements OnInit {
       UsuarioI.Id         + "|" + 
       data.Cantidad       + "|" + 
       a                   + "|" + 
-      data.Glosa          + "|" + 
       data.Vale           + "|" +
       data.Garantia
       ).subscribe(res =>{
@@ -104,7 +103,7 @@ export class AtencionComponent implements OnInit {
         this._snackBar.open(res[0].message, "ok", {duration: 2000})
         // alert(res[0].message);
         if(res[0].Estado==1){
-          this.router.navigate(["/pedidos"]);
+          this.router.navigate(["/entrega"]);
         }         
       });
     // console.log(data);

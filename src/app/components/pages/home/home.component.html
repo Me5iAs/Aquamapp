@@ -15,10 +15,46 @@
       <mat-card-title>{{userData.Usuario}} </mat-card-title>
       <mat-card-subtitle>{{userData.Tipo}} </mat-card-subtitle>
     </mat-card-header>
-    
+    <mat-card-content>
+      <div style='text-align: center;'>
+        <div class='tareas'>
+          <mat-icon class="iconos">battery_full</mat-icon>
+          Producción
+        </div>
+
+        <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">phone_callback</mat-icon>
+          Registrar Pedidos
+        </div>
+        
+        <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">local_shipping</mat-icon>
+          Salir a entregar</div>
+        
+          <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">store</mat-icon>
+          Entregado en tienda</div>
+        
+          <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">monetization_on</mat-icon>
+          Rendir cuenta</div>
+        
+        <!-- <button style='width: 120px; max-width: 30%; margin:2.5px' mat-stroked-button *ngFor='let op of Opciones' (click)="onIr(op.Link)">
+          <mat-icon>{{op.Icon}}</mat-icon>
+          <br>
+          <span>{{op.Title}} </span>
+        </button> -->
+      </div>
+    </mat-card-content>
     <mat-card-actions style="text-align: center;">
       <!-- <button mat-button routerLink="/profile">Perfil</button> -->
       <button mat-button (click)="onLogout()" >Cerrar Sesión</button>
     </mat-card-actions>
   </mat-card>
 </div>
+
+

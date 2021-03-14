@@ -13,7 +13,7 @@ import {MaterialModule} from "../../../material.module";
     MaterialModule,
     VerPedidosMapRoutingModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyA8d0CD3InmjRc4R8GX3mf6ByuebwPwJUo',
+      apiKey: 'AIzaSyDfXfxPJGomCNonsmQiH1JuTTXdaUl-QaE',
       libraries: ['places']
     })
   ]

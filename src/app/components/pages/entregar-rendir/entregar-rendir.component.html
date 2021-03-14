@@ -1,0 +1,109 @@
+<mat-toolbar>
+
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Enviar Pedido</span>
+ 
+  
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card>
+    <form [formGroup]="RendirForm">
+      <mat-form-field>
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-label>Seleccione repartidor</mat-label>
+        <mat-select formControlName="Usuario" placeholder="Repartidor" (ngModelChange)="CargarPedidosPorRendir()">
+          <mat-option *ngFor="let op of Repartidores" [value]="op.Id" >
+            {{op.Usuario}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <mat-card-content >
+      <!-- // displayedColumns: string[] = ['Cliente', 'Bot', 'Vale', 'Gar', 'S/', 'Del']; -->
+      <table>
+        <tr>
+          <th>Del</th>
+          <th>Cliente</th>
+          <th>Precio</th>
+          <th>Bot</th>
+          <th>Vales</th>
+          <th>Garantía</th>
+          <th>Total S/</th>
+          <th>Del</th>
+        </tr>
+
+        <tr *ngFor="let op of Pedidos">
+          <td>
+            <button mat-icon-button (click)="onDelPedido(op.IdPedido)" color="warn">
+              <mat-icon>highlight_off</mat-icon>
+            </button>
+          </td>
+
+          <td>{{op.Cliente}} </td>
+          
+          <td style= "text-align: center;">
+            <mat-select [(ngModel)]="op.Precio" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia ">
+              <mat-option  [value]="'2.00'">S/ 2.00</mat-option>
+              <mat-option  [value]="'2.50'">S/ 2.50</mat-option>
+              <mat-option  [value]="'3.00'">S/ 3.00</mat-option>
+              <mat-option  [value]="'3.50'">S/ 3.50</mat-option>
+            </mat-select>
+          </td>
+
+          <td style= "text-align: center;">
+            <mat-select [(ngModel)]="op.Cantidad" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia " >
+              <mat-option *ngFor="let bot of Botellones" [value]="bot.Cantidad">{{ bot.Texto }}</mat-option>
+            </mat-select> 
+          </td>
+          <td style= "text-align: center;">
+            <mat-select [(ngModel)]="op.Vales" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia ">
+              <mat-option  [value]="0">0</mat-option>
+              <mat-option  [value]="1">1</mat-option>
+              <mat-option  [value]="2">2</mat-option>
+              <mat-option  [value]="3">3</mat-option>
+              <mat-option  [value]="4">4</mat-option>
+              <mat-option  [value]="5">5</mat-option>
+            </mat-select>
+          </td>
+          <td style= "text-align: center;">
+            <mat-select [(ngModel)]="op.Garantia" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia ">
+              <mat-option  [value]="0">0</mat-option>
+              <mat-option  [value]="5">S/ 5.00</mat-option>
+              <mat-option  [value]="10">S/ 10.00</mat-option>
+              <mat-option  [value]="15">S/ 15.00</mat-option>
+              <mat-option  [value]="20">S/ 20.00</mat-option>
+              <mat-option  [value]="25">S/ 25.00</mat-option>
+              <mat-option  [value]="30">S/ 30.00</mat-option>
+            </mat-select>  
+          </td>
+          <td style= "text-align: right;">{{ op.Total | number:'1.2-2' }} </td>
+          <td style= "text-align: center;">
+            <button mat-icon-button (click)="onAtenderPedido(op)" color="primary">
+              <mat-icon>file_download_done</mat-icon>
+            </button>
+           
+          </td>
+
+        </tr>
+      </table> 
+    </mat-card-content>
+
+    <mat-card-footer>
+    
+
+    </mat-card-footer>
+
+  </mat-card>
+
+  <mat-card *ngIf="dataSource==null">
+    <mat-card-header>
+      <mat-card-title>No se encuentran clientes</mat-card-title>
+      <mat-card-subtitle>Actualmente el sistema no tiene registrado ninguna entrega pendiente.</mat-card-subtitle>
+    </mat-card-header>
+
+  </mat-card>
+
+
+</div>

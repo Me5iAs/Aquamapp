@@ -22,12 +22,37 @@ export class NewClientesComponent implements OnInit {
   lng;
   latC;
   lngC;
+  public Botellones;
+  public Precios;
 
   constructor(
     private gQuery:gQueryService, 
     private router:Router, 
     private _snackBar: MatSnackBar,
     private enviandoImagen:SubirService) {
+
+      this.Botellones = [
+        {Cantidad: 0, Texto: "Sin Botellones"},
+        {Cantidad: 1, Texto: "1 Botellón"}
+      ];
+
+      this.Precios = [
+        {Valor: 2.00, Texto: "S/ 2.00"},
+        {Valor: 2.50, Texto: "S/ 2.50"},
+        {Valor: 3.00, Texto: "S/ 3.00"},
+        {Valor: 3.50, Texto: "S/ 3.50"},
+        {Valor: 4.00, Texto: "S/ 4.00"}
+      ]
+  
+      for (var x=2; x<=30; x++){
+        this.Botellones.push({
+          Cantidad : x,
+          Texto : x + " Botellones"
+        })
+      }
+
+
+
       this.FileData = [
         this.File,
         this.ClienteForm.value
@@ -43,7 +68,9 @@ export class NewClientesComponent implements OnInit {
     Posicion  : new FormControl("" , [Validators.required]),
     Telefono  : new FormControl("", [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(6)]),
     Foto      : new FormControl(""),
-    TipoCliente: new FormControl(0)
+    TipoCliente: new FormControl(0),
+    Botellones: new FormControl(10),
+    Precio: new FormControl(),
   });
 
   // CARGA INICIAL
@@ -140,7 +167,9 @@ export class NewClientesComponent implements OnInit {
       a[0]                + "|" + 
       a[1]                + "|" +
       userData.Id         + "|" +
-      data.TipoCliente
+      data.TipoCliente    + "|" +
+      data.Botellones     + "|" +
+      data.Precio
       ).subscribe(res =>{
         target.style.display = "none"
         if(res[0].Estado==1){

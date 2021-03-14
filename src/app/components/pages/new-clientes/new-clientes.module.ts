@@ -17,7 +17,7 @@ import { AgmCoreModule } from '@agm/core';
     FormsModule,
     // GMapaModule
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyA8d0CD3InmjRc4R8GX3mf6ByuebwPwJUo',
+      apiKey: 'AIzaSyDfXfxPJGomCNonsmQiH1JuTTXdaUl-QaE',
       libraries: ['places']
     })
   ]

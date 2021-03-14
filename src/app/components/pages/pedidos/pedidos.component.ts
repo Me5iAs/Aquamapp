@@ -23,13 +23,15 @@ import { Router } from '@angular/router';
 
 
 export class PedidosComponent implements OnInit {
-  displayedColumns: string[] = ['Cliente','Borrar'];
+  displayedColumns: string[] = [ 'Nro','Cliente','Usuario','Borrar'];
   dataSource = new MatTableDataSource();  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-
+  public Repartidores;
   public Botellones;
+  public total_envio:number = 0;
+  public Pedidos_sel = []
   public userData: UsuarioI = JSON.parse(sessionStorage.getItem("dataUser"));
 
   EntregaForm = new FormGroup({
@@ -51,10 +53,21 @@ export class PedidosComponent implements OnInit {
       })
     }
   }
-
+  EnviarForm = new FormGroup({
+    Usuario: new FormControl()
+  });
   
   ngOnInit() {
-    this.CargarPedidos();  
+    this.CargarPedidos();
+    
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
+    this.gQuery.sql("sp_repartidores_devolver")
+    .subscribe(data =>{
+      target.style.display = "none"
+      this.Repartidores = data;
+    })
   }
 
   CargarPedidos(){
@@ -62,7 +75,7 @@ export class PedidosComponent implements OnInit {
     target.style.display = "block"
     
     this.gQuery
-    .sql("sp_pedidos_pendientes_devolver")
+    .sql("sp_pedidos_pendientes_devolver", "0")
     .subscribe(data =>{
       target.style.display = "none"
       if (data==null){
@@ -99,6 +112,23 @@ export class PedidosComponent implements OnInit {
     
   }
 
+  onSeleccionar(id, cant, ele){
+    if(ele){
+      // agregar 
+      this.Pedidos_sel.push(id);
+      this.total_envio = this.total_envio + parseInt(cant);
+    }else{
+      var i = this.Pedidos_sel.indexOf( id );
+ 
+      if ( i !== -1 ) {
+        this.Pedidos_sel.splice( i, 1 );
+        this.total_envio = this.total_envio - parseInt(cant);
+      }
+    }
+    // console.log(this.Pedidos_sel);
+    // console.log(this.EnviarForm.controls.Usuario.value);
+    
+  }
   onDelPedido(Id){
     if(!confirm("Esta acción eliminará el Pedido, desea continuar")) {
       return;
@@ -116,6 +146,35 @@ export class PedidosComponent implements OnInit {
         alert("Pedido eliminado con éxito")
         this.CargarPedidos()
       });
+  }
+
+  onEnviarPedido(){
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
+
+    this.gQuery
+      .sql("sp_pedidos_enviar",
+      this.EnviarForm.controls.Usuario.value + "|" + this.Pedidos_sel.join('-')
+      )
+      .subscribe(res =>{
+        console.log(res);
+        target.style.display = "none"  
+        alert("envio registrado")
+        this.total_envio = 0;
+        this.Pedidos_sel = [];
+        this.CargarPedidos()
+        
+      });
+  }
+
+  onGetData(){
+    var total = 0;  
+    this.dataSource.data.forEach(function (obj) {
+      total = total + parseFloat(obj["Cantidad"]);
+    });
+    return total;
+    
   }
   
 }

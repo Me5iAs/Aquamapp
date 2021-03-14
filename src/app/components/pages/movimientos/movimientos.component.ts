@@ -12,6 +12,8 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {movimientoI} from "../../../models/movimiento.interface"
 import {MatSnackBar} from '@angular/material/snack-bar';
 
+
+
 @Component({
   selector: 'app-movimientos',
   templateUrl: './movimientos.component.html',
@@ -25,7 +27,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 // 
 export class movimientosComponent implements OnInit {
   
-  displayedColumns: string[] = ['Fecha', 'Usuario', 'Categoria', 'Monto'];
+  displayedColumns: string[] = ['chk','Fecha', 'Usuario', 'Categoria', 'Monto', 'Info'];
   dataSource = new MatTableDataSource();
   public Categoria = [
     {
@@ -44,6 +46,7 @@ export class movimientosComponent implements OnInit {
   public Desde = new Date();
   public Hasta = new Date();
   public filtro = false;
+  public IncluyeCajaGeneral = false;
   public Total;
   constructor(public gQuery:gQueryService, private router:Router, public dialog: MatDialog) {}
        
@@ -53,7 +56,7 @@ export class movimientosComponent implements OnInit {
   target.style.display = "block"
 
    this.gQuery
-    .sql("sp_mov_devolver", this.gQuery.fecha_2b(this.Desde) + "|" + this.gQuery.fecha_2b(this.Hasta) )
+    .sql("sp_mov_devolver", this.gQuery.fecha_2b(this.Desde) + "|" + this.gQuery.fecha_2b(this.Hasta) + "|" + this.IncluyeCajaGeneral )
     .subscribe(data =>{
       // console.log(data);
       target.style.display = "none"    
@@ -71,12 +74,8 @@ export class movimientosComponent implements OnInit {
         }
         this.Total = parseFloat(this.Total).toFixed(2);
         
-      }else{
-        // console.log("nada");
-        
+      }else{        
         this.dataSource= new MatTableDataSource(<any> data);
-        // console.log(this.dataSource.data);
-        
       }
       
     });
@@ -111,15 +110,34 @@ export class movimientosComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
+    this.Total = 0;
+    for(var x=0; x <Object.values(this.dataSource.filteredData).length; x++){
+      console.log(this.dataSource.filteredData[x]["Tipo"] + ". " + this.Total + "="+  Number(this.Total) + " + " + Number(this.dataSource.filteredData[x]["Monto"]));
+      if(this.dataSource.filteredData[x]["Tipo"] =='Ingresos'){
+        this.Total = Number(this.Total) + Number(this.dataSource.filteredData[x]["Monto"]);
+      }else{
+        this.Total = Number(this.Total) - Number(this.dataSource.filteredData[x]["Monto"]);
+      }
+    }
+    this.Total = parseFloat(this.Total).toFixed(2);
+
+    // this.Total = this.dataSource.filteredData.map(t => t.duration).reduce((acc, value) => acc + value, 0)
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
+
   onModalMovimiento(mov:movimientoI, pAccion:"Nuevo" | "Info"){
+    var dia, mes, año;
     if(pAccion =="Nuevo"){
+      dia = new Date().getDate();
+      mes = new Date().getMonth()+1;
+      año = new Date().getFullYear();
+
       mov = <movimientoI> {
         Id: "",
-        Fecha: new Date(),
+        Fecha: new Date(mes + "-" + dia + "-"+año),
         Usuario: "",
         IdCat:"",
         Categoria: "",
@@ -131,6 +149,8 @@ export class movimientosComponent implements OnInit {
       }  
     }else{
       mov.Accion = pAccion;
+      console.log(mov);
+      
     }
 
     const dialogRef = this.dialog.open(Dialogmovimientos, {
@@ -145,7 +165,6 @@ export class movimientosComponent implements OnInit {
     });
   }
 }
-
 
 
 @Component({
@@ -179,10 +198,15 @@ export class Dialogmovimientos implements OnInit{
           Glosa: new FormControl("", Validators.required)
         });
       }else{
+        var dia = dataMov.Fecha.toString().slice(0,2);
+        var mes = dataMov.Fecha.toString().slice(3,5);
+        var año = dataMov.Fecha.toString().slice(6,10);
+        
 
         this.MovimientoForm = new FormGroup({
           Id: new FormControl(this.dataMov.Id),
-          Fecha: new FormControl( this.dataMov.Fecha),
+          // Fecha: new FormControl( this.dataMov.Fecha),
+          Fecha: new FormControl(new Date(mes + "-" + dia + "-"+año), Validators.required),
           Tipo: new FormControl(this.dataMov.Tipo),
           Monto: new FormControl(this.dataMov.Monto),
           Categoria: new FormControl(this.dataMov.Categoria),
@@ -202,15 +226,36 @@ export class Dialogmovimientos implements OnInit{
   }
 
   onDelMov(data: movimientoI){
+    if(!confirm("Esta acción eliminará al movimiento, desea continuar")) {
+      return;
+    }
+
     var target = document.getElementById('cargando_principal');
     target.style.display = "block"
 
     this.gQuery.sql(
       "sp_mov_delete",
       this.dataMov.Id).subscribe(res =>{
-        // alert(res[0].Message);
+        alert(res[0].message);
         target.style.display = "none"
-        this._snackBar.open(res[0].message, "ok", {duration: 2000})
+        // this._snackBar.open(res[0].message, "ok", {duration: 2000})
+        // this.dialogRef.close(true);
+    });
+  }
+  onUpdateMov(data: movimientoI){
+    let sFecha = new Date(data.Fecha);
+    let dFecha = sFecha.toISOString().split('T')[0];   
+    
+    var target = document.getElementById('cargando_principal');
+    target.style.display = "block"
+
+    this.gQuery.sql(
+      "sp_mov_update",
+      data.Id + "|" + dFecha + "|" + data.Monto + "|" + data.Glosa
+      ).subscribe(res =>{
+        alert(res[0].Message);
+        target.style.display = "none"
+        // this._snackBar.open(res[0].message, "ok", {duration: 2000})
         this.dialogRef.close(true);
     });
   }

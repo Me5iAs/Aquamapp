@@ -80,15 +80,12 @@ export class NuevoPedidoComponent implements OnInit {
       }
     }
 
-    
-  
-
   PedidoForm = new FormGroup({
     Cliente       : new FormControl("Anónimo", [Validators.required]),
     Cantidad      : new FormControl(10, [Validators.pattern("^[0-9]*$"), Validators.required]),
     Fecha_entrega : new FormControl(new Date(),[Validators.required]),
     // Hora_entrega  : new FormControl("", [Validators.required]),
-    Precio        : new FormControl(2 , [Validators.required]),
+    Precio        : new FormControl(3.5 , [Validators.required]),
     Glosa         : new FormControl(" "),
     
   });
@@ -119,7 +116,8 @@ export class NuevoPedidoComponent implements OnInit {
       for(var x = 0; x<Object.values(data).length; x++){
         this.Clientes.push({
           Id: data[x].Id,
-          Nombre: data[x].Nombre
+          Nombre: data[x].Nombre,
+          Precio: data[x].Precio
         });
         
       }
@@ -139,6 +137,14 @@ export class NuevoPedidoComponent implements OnInit {
   ngAfterViewInit(){
   }
 
+  CargarPrecio(event){    
+    // console.log(event);
+    // console.log(event.option.value);
+    var a = this.Clientes.filter( op => op.Nombre == event.option.value );
+    // console.log(a[0].Precio);
+    this.PedidoForm.controls.Precio.setValue(Number(a[0].Precio));
+    
+  }
   onRegistrarPedido(data){
     console.log(data.Cliente);
     
@@ -152,7 +158,7 @@ export class NuevoPedidoComponent implements OnInit {
       return;
     }
 
-    if(IdCliente[0].Id==0 && data.Glosa ==" "){
+    if(IdCliente[0].Id==0 && (data.Glosa ==" " || data.Glosa=="")){
       this._snackBar.open("para clientes anónimo necesita ingresar la direccion y teléfono como comentario", "ok", {duration: 2000})
       // alert("para clientes anónimo necesita ingresar la direccion y teléfono como comentario");
       return;
@@ -165,9 +171,6 @@ export class NuevoPedidoComponent implements OnInit {
       "sp_pedido_registrar",
       IdCliente[0].Id                              + "|" + 
       UsuarioI.Id                                  + "|" + 
-      this.gQuery.fecha_2b(data.Fecha_entrega)     + "|" + 
-      // data.Hora_entrega                            + "|" + 
-      "15:30:00"                                   + "|" + 
       data.Cantidad                                + "|" +        
       data.Precio                                  + "|" +        
       data.Glosa
@@ -180,10 +183,13 @@ export class NuevoPedidoComponent implements OnInit {
           this.PedidoForm.controls.Cliente.setValue("Anónimo");
           this.PedidoForm.controls.Cantidad.setValue(10);
           this.PedidoForm.controls.Fecha_entrega.setValue(new Date());
-          this.PedidoForm.controls.Precio.setValue(2);
-          this.PedidoForm.controls.Glosa.setValue("");
+          this.PedidoForm.controls.Precio.setValue(2.5);
+          this.PedidoForm.controls.Glosa.setValue(" ");
 
 
+        }else{
+          alert("ERRROR" + "\n" +  res[0].message);
+          // this._snackBar.open(res[0].message, "ok", {duration: 2000})
         }
         
       }
