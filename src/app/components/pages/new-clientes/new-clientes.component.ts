@@ -24,6 +24,7 @@ export class NewClientesComponent implements OnInit {
   lngC;
   public Botellones;
   public Precios;
+  public TipoContacto;
 
   constructor(
     private gQuery:gQueryService, 
@@ -31,6 +32,12 @@ export class NewClientesComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private enviandoImagen:SubirService) {
 
+      this.TipoContacto = [
+        {Id:"1", Texto: "Visita a local"},
+        {Id:"2", Texto: "Llamada telefónica"},
+        {Id:"3", Texto: "Whatsapp"},
+        {Id:"4", Texto: "No desea ser contactado"},
+      ]
       this.Botellones = [
         {Cantidad: 0, Texto: "Sin Botellones"},
         {Cantidad: 1, Texto: "1 Botellón"}
@@ -70,6 +77,7 @@ export class NewClientesComponent implements OnInit {
     Foto      : new FormControl(""),
     TipoCliente: new FormControl(0),
     Botellones: new FormControl(10),
+    TipoContacto: new FormControl("1"),
     Precio: new FormControl(),
   });
 
@@ -169,7 +177,8 @@ export class NewClientesComponent implements OnInit {
       userData.Id         + "|" +
       data.TipoCliente    + "|" +
       data.Botellones     + "|" +
-      data.Precio
+      data.Precio         + "|" +
+      data.TipoContacto
       ).subscribe(res =>{
         target.style.display = "none"
         if(res[0].Estado==1){

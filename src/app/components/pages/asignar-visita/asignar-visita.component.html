@@ -1,0 +1,189 @@
+<mat-toolbar>
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Asignar Visitas</span>
+</mat-toolbar>
+
+<!-- <mat-spinner *ngIf="isLoadingResults"></mat-spinner> -->
+<div class="container" >
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="MostrarForm" (ngSubmit)="CargarProyeccion(MostrarForm.value)">
+        <mat-form-field>
+          <mat-icon matPrefix>data_range</mat-icon>
+          <mat-label>Dias de proyección</mat-label>
+          <mat-select formControlName="Dias">
+            <mat-option *ngFor="let op of Dias" [value]="op.Valor" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-icon-button type="submit">
+          <mat-icon>search</mat-icon>
+        </button>
+        <mat-form-field *ngIf="dataSource.data.length>0" style="margin-top:10px">
+          <mat-label>Buscar </mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juan Perez">
+        </mat-form-field>
+        <div>
+          
+        </div>
+      </form>
+
+      <form [formGroup]="AsignarForm" *ngIf="dataSource.data.length>0">
+        Clientes Seleccionados: {{selection.selected.length}} - {{AsignarForm.controls.Vendedor.value}}
+        <mat-form-field>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-label>Representante de venta</mat-label>
+          <mat-select formControlName="Vendedor" placeholder="Vendedor" >
+            <mat-option *ngFor="let op of Vendedores" [value]="op.Id" >
+              {{op.Usuario}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field> 
+          <mat-label>Fecha Programada</mat-label>
+          <input readonly="true" matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="FechaProg">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button class="aceptar" [disabled]="AsignarForm.controls.Vendedor.value==null || selection.selected.length==0 "  mat-raised-button (click)="onAsignar()">Asignar</button>
+      </form>
+    
+    
+    </mat-card-content>
+  </mat-card>
+  
+
+  <mat-card *ngIf="dataSource.data.length>0"  style="margin-top:10px">
+    <mat-card-content >
+    
+      <!-- displayedColumns = ["Cliente","Segmento", "Pedidos", "Botellones", "Ult_pedido", "Frecuencia","Promedio","Prox_pedido", "Estado"]; -->
+      <table mat-table [dataSource]="dataSource" style="width:100%" matSort> 
+        <!-- check -->
+
+        <ng-container matColumnDef="Chk">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? onCheck() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          *ngIf ="filterValue==''"
+                          >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+
+  
+
+        <!-- cliente -->
+        <ng-container matColumnDef="Cliente">
+          <th mat-header-cell  *matHeaderCellDef  mat-sort-header>
+            Cliente
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.Cliente}}
+          </td>
+        </ng-container>
+
+        <!-- Segmento -->
+        <ng-container matColumnDef="Segmento">
+          <th mat-header-cell  *matHeaderCellDef  mat-sort-header style="width: 35px; text-align: center;">
+            <span class="no_mobile">Segmento</span>
+            <span class="mobile">Cat.</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="rate no_mobile">
+              <mat-icon  class="mat-18">star</mat-icon>
+              <mat-icon *ngIf="Numero(element.Segmento) >1 " class="mat-18">star</mat-icon>
+              <mat-icon *ngIf="Numero(element.Segmento) >2 " class="mat-18">star</mat-icon>
+              <mat-icon *ngIf="Numero(element.Segmento) >3 " class="mat-18">star</mat-icon>
+              <mat-icon *ngIf="Numero(element.Segmento) >4 " class="mat-18">star</mat-icon>
+            </span>
+            <span  class="centrar mobile">
+              <span *ngIf="Numero(element.Segmento) ==1 "> E </span>
+              <span *ngIf="Numero(element.Segmento) ==2 "> D </span>
+              <span *ngIf="Numero(element.Segmento) ==3 "> C </span>
+              <span *ngIf="Numero(element.Segmento) ==4 "> B </span>
+              <span *ngIf="Numero(element.Segmento) ==5 "> A </span>
+            </span>
+
+          </td>
+        </ng-container>
+
+        <!-- Pedidos -->
+        <ng-container matColumnDef="Pedidos" >
+          <th mat-header-cell  *matHeaderCellDef class="no_mobile" mat-sort-header style="width: 35px; text-align: center;">Ped.  </th>
+          <td class="centrar no_mobile" mat-cell *matCellDef="let element">{{element.Pedidos}}</td>
+        </ng-container>
+      
+        <!-- Botellones -->
+        <ng-container matColumnDef="Botellones">
+          <th mat-header-cell  class="no_mobile" *matHeaderCellDef style="width: 35px; text-align: center;" mat-sort-header>Bot compr  </th>
+          <td class="centrar no_mobile" mat-cell *matCellDef="let element">{{element.Botellones}}</td>
+        </ng-container>
+
+        <!-- ultimo pedido -->
+        <ng-container matColumnDef="Ult_pedido">
+          <th class="no_mobile" mat-header-cell  *matHeaderCellDef style="width: 35px; text-align: center;"> Ultimo Pedido</th>
+          <td class="centrar no_mobile" mat-cell *matCellDef="let element" style="padding-left:10px; padding-right:10px">
+           <!-- {{ element.Ult_Pedido}} -->
+            <span class="SubTituloCh" style="text-align: center;">{{gQuery.parte_fecha(element.Ult_Pedido, 'm') }} </span>
+            <span class="SubTituloGr" style="font-size:20.3pt; text-align: center;">{{element.Ult_Pedido.split("/")[0] }} </span>          
+            </td>
+        </ng-container>
+
+        <!-- Frecuencia -->
+        <ng-container matColumnDef="Frecuencia">
+          <th mat-header-cell  *matHeaderCellDef class="no_mobile" mat-sort-header style="width: 35px; text-align: center;">Frec. Compra  </th>
+          <td mat-cell *matCellDef="let element" class="no_mobile" style="text-align: center;">{{element.Frecuencia}}</td>
+        </ng-container>
+
+        <!-- Promedio -->
+        <ng-container matColumnDef="Promedio">
+          <th mat-header-cell  *matHeaderCellDef class="no_mobile" mat-sort-header style="width: 35px; text-align: center;">Prom Mes  </th>
+          <td mat-cell *matCellDef="let element" class="no_mobile" style="text-align: center;">{{element.Promedio}}</td>
+        </ng-container>
+
+        <!-- Prox_pedido -->
+        <ng-container matColumnDef="Prox_pedido">
+          <th mat-header-cell  *matHeaderCellDef style="width: 35px; text-align: center;">Prox Pedido  </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="SubTituloCh" style="text-align: center;">{{gQuery.parte_fecha(element.Prox_pedido, 'm') }} </span>
+            <span class="SubTituloGr" style="font-size:20.3pt; text-align: center;">{{element.Prox_pedido.split("/")[0] }} </span>          
+
+          </td>
+
+        </ng-container>
+
+
+        <!-- Estado -->
+        <ng-container matColumnDef="Estado">
+          <th mat-header-cell  *matHeaderCellDef  mat-sort-header style="width: 35px; text-align: center;">Estado  </th>
+          <td mat-cell *matCellDef="let element" style="text-align: center;">
+            <mat-icon class="mat-18" style="color:red " *ngIf="element.Estado =='Vencido'" >warning</mat-icon>
+            <mat-icon class="mat-18" style="color:green" *ngIf="element.Estado !='Vencido'" >info</mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+
+      </table>
+      <!-- <button mat-raised-button style='margin: 10px auto;' class="aceptar" (click)="exportAsExcel()">
+        Exportar a Excel
+      </button> -->
+    </mat-card-content>
+    <mat-card-footer>
+      <mat-paginator [pageSize]="50" [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card-footer>
+  </mat-card> 
+ 
+
+</div>

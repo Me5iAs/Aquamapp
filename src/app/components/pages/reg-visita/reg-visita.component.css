@@ -1,0 +1,31 @@
+mat-toolbar{
+  background: #004998 !important;
+  background: -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  background: linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  color: #fff;
+  position: absolute;
+  z-index: 1000;
+  top: 0px;
+}
+
+.aceptar{
+  background: #004998 !important;
+  color: #fff;
+}
+
+.container{
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px ;
+  justify-content: center;
+  margin-top: 60px;
+
+}
+
+mat-form-field {
+  display: block;
+  margin: auto;
+  max-width: 500px;
+}
+  

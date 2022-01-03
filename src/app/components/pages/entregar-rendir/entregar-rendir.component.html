@@ -1,7 +1,7 @@
 <mat-toolbar>
 
   <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
-  <span style="flex: 1 1 auto; text-align: center;">Enviar Pedido</span>
+  <span style="flex: 1 1 auto; text-align: center;">Rendir Cuenta</span>
  
   
 </mat-toolbar>
@@ -20,90 +20,78 @@
       </mat-form-field>
     </form>
 
-    <mat-card-content >
-      <!-- // displayedColumns: string[] = ['Cliente', 'Bot', 'Vale', 'Gar', 'S/', 'Del']; -->
+    <mat-card-content *ngIf="Pedidos.length>0">
+      
       <table>
         <tr>
-          <th>Del</th>
+          <th></th>
           <th>Cliente</th>
+          <th>Estado</th>
           <th>Precio</th>
           <th>Bot</th>
           <th>Vales</th>
           <th>Garantía</th>
           <th>Total S/</th>
-          <th>Del</th>
         </tr>
 
-        <tr *ngFor="let op of Pedidos">
+        <tr *ngFor="let op of Pedidos" [ngClass]="op.Estado=='Rechazado' ? 'rojo' : ''" >
+          <!-- icono -->
           <td>
-            <button mat-icon-button (click)="onDelPedido(op.IdPedido)" color="warn">
-              <mat-icon>highlight_off</mat-icon>
-            </button>
+            <mat-icon *ngIf="op.Estado=='Rechazado'" class="mat-18 rojo">warning</mat-icon>
+            <mat-icon *ngIf="op.Estado!='Rechazado'" class="mat-18" style="color:green">info</mat-icon>
           </td>
 
+          <!-- cliente -->
           <td>{{op.Cliente}} </td>
+
+          <!-- estado -->
+          <td>{{op.Estado}} </td>
           
-          <td style= "text-align: center;">
-            <mat-select [(ngModel)]="op.Precio" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia ">
-              <mat-option  [value]="'2.00'">S/ 2.00</mat-option>
-              <mat-option  [value]="'2.50'">S/ 2.50</mat-option>
-              <mat-option  [value]="'3.00'">S/ 3.00</mat-option>
-              <mat-option  [value]="'3.50'">S/ 3.50</mat-option>
-            </mat-select>
+           <!-- precio -->
+           <td style= "text-align: center;" >
+            {{op.Precio | number:'1.2-2' }}
           </td>
 
+          <!-- botellones -->
           <td style= "text-align: center;">
-            <mat-select [(ngModel)]="op.Cantidad" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia " >
-              <mat-option *ngFor="let bot of Botellones" [value]="bot.Cantidad">{{ bot.Texto }}</mat-option>
-            </mat-select> 
+            {{op.Cantidad}}
           </td>
-          <td style= "text-align: center;">
-            <mat-select [(ngModel)]="op.Vales" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia ">
-              <mat-option  [value]="0">0</mat-option>
-              <mat-option  [value]="1">1</mat-option>
-              <mat-option  [value]="2">2</mat-option>
-              <mat-option  [value]="3">3</mat-option>
-              <mat-option  [value]="4">4</mat-option>
-              <mat-option  [value]="5">5</mat-option>
-            </mat-select>
-          </td>
-          <td style= "text-align: center;">
-            <mat-select [(ngModel)]="op.Garantia" (ngModelChange)="op.Total = (op.Cantidad * op.Precio) - (op.Precio * op.Vales) + op.Garantia ">
-              <mat-option  [value]="0">0</mat-option>
-              <mat-option  [value]="5">S/ 5.00</mat-option>
-              <mat-option  [value]="10">S/ 10.00</mat-option>
-              <mat-option  [value]="15">S/ 15.00</mat-option>
-              <mat-option  [value]="20">S/ 20.00</mat-option>
-              <mat-option  [value]="25">S/ 25.00</mat-option>
-              <mat-option  [value]="30">S/ 30.00</mat-option>
-            </mat-select>  
-          </td>
-          <td style= "text-align: right;">{{ op.Total | number:'1.2-2' }} </td>
-          <td style= "text-align: center;">
-            <button mat-icon-button (click)="onAtenderPedido(op)" color="primary">
-              <mat-icon>file_download_done</mat-icon>
-            </button>
-           
+          
+          <td colspan="3" *ngIf="op.Estado=='Rechazado'" >
+            {{op.Glosa}}
           </td>
 
+          
+          <td style= "text-align: center;" *ngIf="op.Estado!='Rechazado'">
+            {{op.Vales}}
+          </td>
+
+          <td style= "text-align: center;" *ngIf="op.Estado!='Rechazado'">
+            {{op.Garantia}}
+          </td>
+
+          <td *ngIf="op.Estado!='Rechazado'" style= "text-align: center;">{{Numero((op.Cantidad * op.Precio) - (op.Precio * op.Vales)) + Numero(op.Garantia)  | number:'1.2-2' }} </td>
+  
+        </tr>
+
+        <tr>
+          <td></td>
+          <td colspan="3">Total</td>
+          <td style="text-align: center;">{{TotBot}}</td>
+          <td style="text-align: center;">{{TotVale}}</td>
+          <td style="text-align: center;">-</td>
+          <td style="text-align: center;">{{this.TotalSol | number:'1.2-2'}}</td>
         </tr>
       </table> 
     </mat-card-content>
 
-    <mat-card-footer>
-    
-
+    <mat-card-footer *ngIf="Pedidos.length>0" style="text-align: center;">
+      <button mat-raised-button class="aceptar" (click)="onAtenderPedidos()" style="margin: 5px;">
+        <mat-icon matPrefix>check</mat-icon>
+        Rendir
+      </button>
     </mat-card-footer>
 
   </mat-card>
-
-  <mat-card *ngIf="dataSource==null">
-    <mat-card-header>
-      <mat-card-title>No se encuentran clientes</mat-card-title>
-      <mat-card-subtitle>Actualmente el sistema no tiene registrado ninguna entrega pendiente.</mat-card-subtitle>
-    </mat-card-header>
-
-  </mat-card>
-
 
 </div>

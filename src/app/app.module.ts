@@ -39,7 +39,7 @@ const routes: Routes = [
     {path: 'nuevo_pedido', loadChildren: () => import('./components/pages/nuevo-pedido/nuevo-pedido.module').then(m => m.NuevoPedidoModule) },
     {path: 'edit_user/:IdCli', loadChildren: () => import('./components/pages/edit-user/edit-user.module').then(m => m.EditUserModule) },
     {path: 'atencion/:IdPedido', loadChildren: () => import('./components/pages/atencion/atencion.module').then(m => m.AtencionModule) },
-    {path: 'reportes', loadChildren: () => import('./components/pages/reportes/reportes.module').then(m => m.ReportesModule) },
+    
     {path: 'vehiculos', loadChildren: () => import('./components/pages/vehiculos/vehiculos.module').then(m => m.VehiculosModule) },
     {path: 'ver_pedidos_map/:Estado', loadChildren: () => import('./components/pages/ver-pedidos-map/ver-pedidos-map.module').then(m => m.VerPedidosMapModule) },
     {path: 'pos_clientes', loadChildren: () => import('./components/pages/posicion-clientes/posicion-clientes.module').then(m => m.PosicionClientesModule) },
@@ -49,6 +49,12 @@ const routes: Routes = [
     {path: 'prod', loadChildren: () => import('./components/pages/prod/prod.module').then(m => m.ProdModule) },
     {path: 'entregar_r', loadChildren: () => import('./components/pages/entregar-rendir/entregar-rendir.module').then(m => m.EntregarRendirModule) },
     { path: 'reports', loadChildren: () => import('./components/pages/reports/reports.module').then(m => m.ReportsModule) },
+    { path: 'ruta', loadChildren: () => import('./components/pages/ruta/ruta.module').then(m => m.RutaModule) },
+    { path: 'asignar', loadChildren: () => import('./components/pages/asignar-visita/asignar-visita.module').then(m => m.AsignarVisitaModule) },
+    { path: 'reg_visita/:IdVisita/:NomCli', loadChildren: () => import('./components/pages/reg-visita/reg-visita.module').then(m => m.RegVisitaModule) },
+    { path: 'ver_map/:CodTipo/:Datos', loadChildren: () => import('./components/pages/ver-map/ver-map.module').then(m => m.VerMapModule) },
+    { path: 'seguimiento', loadChildren: () => import('./components/pages/seguimiento/seguimiento.module').then(m => m.SeguimientoModule) },
+    { path: 'status_ped', loadChildren: () => import('./components/pages/estado-pedido/estado-pedido.module').then(m => m.EstadoPedidoModule) },
     {path:"", redirectTo:"home", pathMatch:"full"}
   ] },
   { path: '*', redirectTo: '/', pathMatch: 'full' },

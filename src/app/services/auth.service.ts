@@ -8,7 +8,7 @@ import { isNullOrUndefined } from 'util';
 import {MatSnackBar} from '@angular/material/snack-bar';
 // import Swal from 'sweetalert2'
 
-// const url_api = "http://192.168.1.42/gSesions.php";
+// const url_api = "http://192.168.1.39/aquamapp/gSesions.php";
 const url_api = "http://localhost/aquamapp/gSesions.php";
 // const url_api = "backend/gSesions.php";
 const Cabecera: HttpHeaders = new HttpHeaders({

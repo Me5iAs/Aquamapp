@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map, retry} from "rxjs/operators/";
 
 
-// const url_api = "http://192.168.1.42/gQuery.php";
+// const url_api = "http://192.168.1.39/aquamapp/gQuery.php";
 const url_api = "http://localhost/aquamapp/gQuery.php";
 // const url_api = "backend/gQuery.php";
 // data.datos = data.datos.replace(/"/gi,"");

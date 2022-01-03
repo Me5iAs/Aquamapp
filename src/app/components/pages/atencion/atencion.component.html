@@ -13,18 +13,16 @@
       <mat-card-title> {{data.Cliente}} </mat-card-title>
       <mat-card-subtitle *ngIf="data.Direccion" > 
         {{data.Direccion}} + {{data.Referencia}} 
-        <span (click)="VerMapa(data.Latitud, data.Longitud)" style="cursor: pointer;">
-          (ver mapa 
-          <mat-icon Suffix  >map</mat-icon>
-          )
-        </span>
-        
       </mat-card-subtitle>
-      <mat-card-subtitle *ngIf="data.Telefono" > {{data.Telefono}} </mat-card-subtitle>
-      <mat-card-subtitle *ngIf="data.Commentario != ' '" > {{data.Comentario}} </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="data.Telefono" >Telefono: {{data.Telefono}} </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="data.Commentario == ' '">Glosa: {{data.Comentario}} </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-
+      <button mat-raised-button (click)="VerMapa(data.Latitud, data.Longitud)" style="cursor: pointer; margin: auto auto 15px auto; display: block;">
+        ver mapa 
+        <mat-icon Suffix  >map</mat-icon>
+        
+      </button>
       <form [formGroup]="EntregaForm">
         
 
@@ -71,13 +69,13 @@
             EntregaForm.controls.Garantia.value
             }} 
         </h1>
-        <mat-checkbox formControlName="EstadoPago">Pagado </mat-checkbox>
+        <mat-checkbox formControlName="EstadoPago" style="display: none;">Pagado </mat-checkbox>
       </form>
 
 
     </mat-card-content>
     <mat-card-actions style="text-align: center;">
-      <button mat-raised-button routerLink="/pedidos">Regresar</button>
+      <button mat-raised-button routerLink="/entrega">Regresar</button>
       <button mat-raised-button class="aceptar" (click)="onRegistrarAtencion(EntregaForm.value)">Registrar</button>
     </mat-card-actions>
      

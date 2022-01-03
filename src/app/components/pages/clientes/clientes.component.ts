@@ -29,6 +29,7 @@ export class ClientesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   public cliN:clienteI;
+  public EsRoot = false;
   constructor(
     private gQuery:gQueryService,
     public dialog: MatDialog, 
@@ -38,6 +39,12 @@ export class ClientesComponent implements OnInit, AfterViewInit {
 
   
   ngOnInit() {
+    var Usu = JSON.parse(sessionStorage.getItem("dataUser"));
+    if(Usu.CodTipo=="0"){
+      this.EsRoot = true;
+    }else{
+      this.EsRoot = false;
+    }
     this.CargarClientes();  
   }
 

@@ -48,6 +48,7 @@ export class movimientosComponent implements OnInit {
   public filtro = false;
   public IncluyeCajaGeneral = false;
   public Total;
+  public EsRoot = false;
   constructor(public gQuery:gQueryService, private router:Router, public dialog: MatDialog) {}
        
       
@@ -82,6 +83,14 @@ export class movimientosComponent implements OnInit {
   }
 
   ngOnInit() {
+    var Usu = JSON.parse(sessionStorage.getItem("dataUser"));
+    if(Usu.CodTipo=="0"){
+      this.EsRoot = true;
+    }else{
+      this.EsRoot = false;
+    }
+    
+
     this.cargar_ig();
 
     // Cargar categorias
@@ -181,6 +190,8 @@ export class Dialogmovimientos implements OnInit{
   MovimientoForm: FormGroup;
 
   ngOnInit(): void {}
+  public EsRoot = false;
+  public hoy;
 
   constructor(
     private gQuery: gQueryService,
@@ -188,10 +199,28 @@ export class Dialogmovimientos implements OnInit{
     public dialogRef: MatDialogRef<Dialogmovimientos>,
     @Inject(MAT_DIALOG_DATA) public dataMov: movimientoI) {
 
+      var Usu = JSON.parse(sessionStorage.getItem("dataUser"));
+      if(Usu.CodTipo=="0"){
+        this.EsRoot = true;
+      }else{
+        this.EsRoot = false;
+      }
 
+      let date = new Date()
+
+      let day = date.getDate()
+      let month = date.getMonth() + 1
+      let year = date.getFullYear()
+      
+      if(month < 10){
+        this.hoy = `${day}/0${month}/${year}`;
+      }else{
+        this.hoy = `${day}/${month}/${year}`;
+      }
+      
       if(dataMov.Accion == "Nuevo"){
         this.MovimientoForm = new FormGroup({
-          Fecha: new FormControl(this.dataMov.Fecha,Validators.required),
+          Fecha: new FormControl( this.dataMov.Fecha,Validators.required),
           // Monto: new FormControl("", [Validators.pattern("^[0-9]*$"), Validators.required]),
           Monto: new FormControl("", [Validators.pattern(/^\d+\.\d{2}$/), Validators.required]),
           IdCat: new FormControl("", Validators.required),
@@ -242,10 +271,16 @@ export class Dialogmovimientos implements OnInit{
         // this.dialogRef.close(true);
     });
   }
+
   onUpdateMov(data: movimientoI){
     let sFecha = new Date(data.Fecha);
-    let dFecha = sFecha.toISOString().split('T')[0];   
-    
+    // let dFecha = sFecha.toISOString().split('T')[0];   
+  
+      let day = sFecha.getDate()
+      let month = sFecha.getMonth() + 1
+      let year = sFecha.getFullYear() 
+      let dFecha = year + "-" + month + "-" + day;
+
     var target = document.getElementById('cargando_principal');
     target.style.display = "block"
 
@@ -262,7 +297,13 @@ export class Dialogmovimientos implements OnInit{
 
   onNewMov(data:movimientoI){
     let sFecha = new Date(data.Fecha);
-    let dFecha = sFecha.toISOString().split('T')[0];   
+    // let dFecha = sFecha.toISOString().split('T')[0];   
+
+    let day = sFecha.getDate()
+    let month = sFecha.getMonth() + 1
+    let year = sFecha.getFullYear() 
+ 
+    let dFecha = year + "-" + month + "-" + day;
 
     var target = document.getElementById('cargando_principal');
     target.style.display = "block"

@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-pedidos',
   templateUrl: './pedidos.component.html',
+  // templateUrl: './pedidos.component.pug',
   styleUrls: ['./pedidos.component.styl'],
   providers: [
     {provide: DateAdapter, useClass: AppDateAdapter},
@@ -23,7 +24,7 @@ import { Router } from '@angular/router';
 
 
 export class PedidosComponent implements OnInit {
-  displayedColumns: string[] = [ 'Nro','Cliente','Usuario','Borrar'];
+  displayedColumns: string[] = [ 'Nro','Cliente','Fecha','Usuario','Borrar'];
   dataSource = new MatTableDataSource();  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -169,10 +170,15 @@ export class PedidosComponent implements OnInit {
   }
 
   onGetData(){
-    var total = 0;  
-    this.dataSource.data.forEach(function (obj) {
-      total = total + parseFloat(obj["Cantidad"]);
-    });
+    var total = 0;
+    if(this.dataSource) {
+      this.dataSource.data.forEach(function (obj) {
+        total = total + parseFloat(obj["Cantidad"]);
+      });
+    }else{
+      total = 0;
+    }
+    
     return total;
     
   }

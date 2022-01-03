@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   ]
 })
 export class EntregaComponent implements OnInit {
-  displayedColumns: string[] = ['Nro','Cliente'];
+  displayedColumns: string[] = ['Nro','Cliente', "Borrar"];
   dataSource = new MatTableDataSource();  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

@@ -1,0 +1,21 @@
+agm-map {
+  height: calc(100vh - 138px);
+  width: 100%;
+}
+
+.success-snackbar {
+ 
+  white-space: pre-wrap
+}
+
+mat-toolbar{
+  background: #004998 !important ;
+  background: -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  background: linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  color: #fff;
+  /* position: absolute; */
+  z-index: 1000;
+  top: 0px;
+}
+  

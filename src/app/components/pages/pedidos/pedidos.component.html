@@ -32,6 +32,8 @@
             </mat-checkbox>
           </td>
         </ng-container>
+
+        <!-- onGetData -->
         <ng-container matColumnDef="Cliente">
           <th mat-header-cell *matHeaderCellDef  mat-sort-header> Cliente </th>
           <td mat-cell *matCellDef="let element"  style="cursor:pointer" > 
@@ -44,32 +46,26 @@
             <span class="cliente_celda" *ngIf='element.Cliente!="Anónimo"'> {{element.Direccion}} ({{element.Referencia}})</span>
             <span class="cliente_celda" *ngIf='element.Cliente=="Anónimo"'> {{element.Comentario}}</span>
 
-            <!-- <span class="subcelda"> [{{element.FechaPide}}] (<b style='color:black'>{{element.Cantidad}}</b> Bot)</span> -->
+            <span class="subcelda" *ngIf="element.Comentario!=' ' && element.Cliente !='Anónimo'" > {{element.Comentario}}</span>
           </td>
         </ng-container>
-        <ng-container matColumnDef="Usuario">
-          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Usuario </th>
+        
+        <ng-container matColumnDef="Fecha">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Fecha Entrega </th>
           <td mat-cell *matCellDef="let element"  style="cursor:pointer" > 
+            <span class="cliente_celda"> {{element.FechaPide}}</span>
+            <span class="subcelda"> {{element.HoraPide}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Usuario">
+          <th  class ="no_mobile" mat-header-cell *matHeaderCellDef  mat-sort-header> Usuario </th>
+          <td  class ="no_mobile" mat-cell *matCellDef="let element"  style="cursor:pointer" > 
               {{element.Usuario}}
           </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="Bot">
-          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Total: {{onGetData() | number }} </th>
-          <td mat-cell *matCellDef="let element"> 
-            <span class="cliente_celda"> {{element.Cantidad}}</span> 
-          </td>
-        </ng-container> -->
-        <!-- <ng-container matColumnDef="Enviar">
-          <th mat-header-cell *matHeaderCellDef  mat-sort-header style="width: 50px;">  </th>
-          <td mat-cell *matCellDef="let element"> 
-            <button mat-icon-button (click)="onEnviarPedido(element.Id)">
-              <mat-icon>local_shipping</mat-icon>
-            </button>
-            
-          </td>
+      
 
-        </ng-container>
-         -->
         <ng-container matColumnDef="Borrar">
           <th mat-header-cell *matHeaderCellDef  mat-sort-header style="width: 50px;"> Total: {{onGetData() | number }} </th>
           <td mat-cell *matCellDef="let element"> 
@@ -119,24 +115,10 @@
 
   <mat-card *ngIf="dataSource==null">
     <mat-card-header>
-      <mat-card-title>No se encuentran clientes</mat-card-title>
-      <mat-card-subtitle>Actualmente el sistema no tiene registrado ningun cliente activo.</mat-card-subtitle>
+      <mat-card-title>No se encuentran Pedidos</mat-card-title>
+      <mat-card-subtitle>Actualmente el sistema no tiene registrado ningun pedido.</mat-card-subtitle>
     </mat-card-header>
-  <mat-card-content style="text-align: center;">
-    elija una opcion:
-  </mat-card-content>
-
-    <mat-card-actions>
-      <button mat-button routerLink="/new_cliente">
-        <mat-icon >person_add</mat-icon>
-        Nuevo Cliente
-      </button>
-   
-      <button mat-button routerLink="/">
-        <mat-icon >home</mat-icon>
-        Ir al inicio
-      </button>
-    </mat-card-actions>
+  
   </mat-card>
 
 

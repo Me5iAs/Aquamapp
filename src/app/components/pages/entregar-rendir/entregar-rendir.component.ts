@@ -4,9 +4,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {gQueryService} from "../../../services/g-query.service";
 import {DateAdapter, MAT_DATE_FORMATS} from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from "../../format-datepicker";
-import {MatTableDataSource} from '@angular/material/table';
+// import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import { UsuarioI } from 'src/app/models/usuario.interface';
+// import { UsuarioI } from 'src/app/models/usuario.interface';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,8 +19,8 @@ import { Router } from '@angular/router';
   ]
 })
 export class EntregarRendirComponent implements OnInit {
-  // displayedColumns: string[] = ['Cliente', 'P.U','Bot', 'Vale', 'Gar', 'S/', 'Del'];
-  dataSource = new MatTableDataSource();  
+  
+  // dataSource = new MatTableDataSource();  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -28,34 +28,20 @@ export class EntregarRendirComponent implements OnInit {
   public Repartidores;
   
   public Pedidos = [];
+  public TotBot=0;
+  public TotVale=0;
+  public TotGar=0;
+  public TotalSol=0;
 
-  public Botellones;
-  public userData: UsuarioI = JSON.parse(sessionStorage.getItem("dataUser"));
   RendirForm = new FormGroup({
     Usuario: new FormControl()
   });
-
-  EntregaForm = new FormGroup({
-    Cantidad      : new FormControl("", [Validators.pattern("^[0-9]*$"), Validators.required]),
-    EstadoPago    : new FormControl("",[Validators.required]),
-    Glosa         : new FormControl(" "),
-    
-  });
    
-  constructor(private gQuery:gQueryService, private router:Router) {
-    this.Botellones = [
-      {Cantidad: 1, Texto: "1"},
-    ]
-    for (var x=2; x<=30; x++){
-      this.Botellones.push({
-        Cantidad : x.toString(),
-        Texto : x  
-      })
-    }
-  }
+  constructor(private gQuery:gQueryService, private router:Router) {}
 
-  
+
   ngOnInit() {
+
     // cargar  usuarios
     var target = document.getElementById('cargando_principal');
     target.style.display = "block"
@@ -64,9 +50,11 @@ export class EntregarRendirComponent implements OnInit {
       target.style.display = "none"
       this.Repartidores = data;
     })
-    // this.CargarPedidos();  
   }
 
+  Numero(d){
+    return Number(d);
+  }
 
   CargarPedidosPorRendir(){
     if(this.RendirForm.controls.Usuario.value){
@@ -75,122 +63,73 @@ export class EntregarRendirComponent implements OnInit {
       var UsuarioI = this.RendirForm.controls.Usuario.value;
       
       this.gQuery
-      .sql("sp_pedidos_entregar", UsuarioI)
-      .subscribe(data =>{      
+      .sql("sp_pedidos_pendientes_rendir", UsuarioI)
+      .subscribe(
+        data =>{      
         target.style.display = "none"  
         this.Pedidos = [];
-        if(data ==null) return;
+        if(data ==null) {
+          alert("No se encuentran pedidos por rendir para este usuario");
+          return;
+        }
         
         var datos:any = data;
+        this.TotBot=0;
+        this.TotVale=0;
+        this.TotGar=0;
+        this.TotalSol=0;
+
         for(var x=0; x <datos.length; x++){
           // agregar resultado a la matrix de pedidos
+          
           this.Pedidos.push({
             IdPedido  : datos[x].Id,
-            IdUsuario : UsuarioI,
             Cliente   : datos[x].Cliente,
+            Estado    : datos[x].Estado,
             Cantidad  : datos[x].Cantidad,
             Precio    : datos[x].Precio,
-            Vales     : 0,
-            Garantia  : 0,
-            Total     : datos[x].Precio * datos[x].Cantidad
+            Vales     : datos[x].Vales,
+            Garantia  : datos[x].Garantia,
+            Glosa     : datos[x].Comentario
           })   
+          this.TotBot = this.TotBot + Number(datos[x].Cantidad);
+          // console.log(this.TotBot);
+          
+          this.TotVale = this.TotVale + Number(datos[x].Vales);
+          this.TotGar = this.TotGar + Number(datos[x].Garantia);
+          if(datos[x].Estado=="Entregado"){
+            this.TotalSol = this.TotalSol + (datos[x].Precio * datos[x].Cantidad) - (datos[x].Precio * datos[x].Vales) + Number(datos[x].Garantia)
+          }
         }
-        console.log(this.Pedidos);
-      });
+        },
+        error =>{
+          alert("error al conectarse a la base de datos, contacte con el administrador");
+        }
+      );
     }
   }
-
-
-
-  ngAfterViewInit(){
-  }
-
   
-  onAtenderPedido(data){
-    var UsuarioI = JSON.parse(sessionStorage.getItem("dataUser"));
-    var a;
-    if(data.EstadoPago==true){
-      a = 1;
-    }else{
-      a = 0;
-    }
+  ngAfterViewInit(){}
+
+  onAtenderPedidos(){
     var target = document.getElementById('cargando_principal');
     target.style.display = "block"
     
-    this.gQuery.sql(
-      "sp_pedido_registrar_entrega",
-      data.IdPedido       + "|" + 
-      UsuarioI.Id         + "|" + 
-      data.Cantidad       + "|" + 
-      "1"                 + "|" + 
-      data.Vales          + "|" +
-      data.Garantia
-      ).subscribe(res =>{
-        target.style.display = "none"
+    var UsuarioEntrega = this.RendirForm.controls.Usuario.value;
+    var UsuarioRegistra = JSON.parse(sessionStorage.getItem("dataUser"));
+    this.gQuery.sql("sp_pedidos_rendir",UsuarioEntrega + "|" + UsuarioRegistra.Id )
+    .subscribe(
+      res =>{
+        target.style.display = "none";
+        this.Pedidos = [];
+        this.RendirForm.controls.Usuario.setValue("");
         alert("Entrega registrada");
-        var i = this.Pedidos.indexOf(data);
-        this.Pedidos.splice( i, 1 );
-
-        // alert(res[0].message);
-                
-      });
-    // console.log(data);
-    
- }
- 
-
-
-  onDelPedido(Id){
-
-    if(!confirm("Seguro que quieres registrar el rechazo del pedido")) {
-      return;
-    }
-
-    var com = window.prompt("ingrese un comentario respecto al rechazo", "");
-    console.log(com);
-    
-    if(com ==null){
-      return;
-    }
-
-    var target = document.getElementById('cargando_principal');
-    target.style.display = "block"
-
-
-    this.gQuery
-      .sql("sp_pedido_rechazar",Id + "|" +  com)
-      .subscribe(res =>{
-        // console.log(res);
-        target.style.display = "none"  
-        alert("Rechazo registrado")
-        this.CargarPedidosPorRendir()
-      });
-  }
-
-  onEnviarPedido(Id){
-    var target = document.getElementById('cargando_principal');
-    target.style.display = "block"
-
-
-    this.gQuery
-      .sql("sp_pedido_enviar",Id)
-      .subscribe(res =>{
-        console.log(res);
-        target.style.display = "none"  
-        alert("envio registrado")
-        this.CargarPedidosPorRendir()
-        
-      });
-  }
-
-  onGetData(){
-    var total = 0;  
-    this.dataSource.data.forEach(function (obj) {
-      total = total + parseFloat(obj["Cantidad"]);
-    });
-    return total;
-    
-  }
-  
+      },
+      error =>{
+        target.style.display = "none";
+        alert("Error al conectarte a la base de datos");
+      }
+    );    
+  }  
 }
 

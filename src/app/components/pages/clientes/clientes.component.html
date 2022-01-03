@@ -45,8 +45,8 @@
         </ng-container>
 
         <ng-container matColumnDef="Del">
-          <th mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
-          <td mat-cell *matCellDef="let element" class="cel" > 
+          <th [ngClass]="EsRoot==false ? 'oculto' : ''" mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
+          <td [ngClass]="EsRoot==false ? 'oculto' : ''" mat-cell *matCellDef="let element" class="cel" > 
             <button mat-icon-button (click)="onDelCliente(element)">
               <mat-icon class="mat-18">highlight_off</mat-icon>
           </button>

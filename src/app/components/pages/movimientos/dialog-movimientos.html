@@ -11,7 +11,9 @@
     <form [formGroup]="MovimientoForm" style="text-align: center;">
       
       <!-- fecha -->
-      <mat-form-field> <!-- *ngIf="dataMov.Accion=='Nuevo'"-->
+      <div *ngIf="!EsRoot">{{hoy}}</div>
+
+      <mat-form-field *ngIf="EsRoot"> 
         <mat-label>Fecha</mat-label>
         <input readonly="true" matInput [matDatepicker]="picker" formControlName="Fecha">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

@@ -66,6 +66,16 @@
 
         </mat-form-field>
 
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>connect_without_contact</mat-icon>
+            <mat-select formControlName="TipoContacto" placeholder="Tipo de contacto">
+              <mat-option *ngFor="let op of TipoContacto" [value]="op.Id" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+
+        </mat-form-field>
+
         <mat-form-field>
           <mat-icon matPrefix>place</mat-icon>
           <input type="text" matInput placeholder="Posición" readonly formControlName="Posicion" >

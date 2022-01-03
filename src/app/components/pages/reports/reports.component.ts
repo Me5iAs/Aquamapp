@@ -26,6 +26,8 @@ export class ReportsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild('TABLE') table: ElementRef;
 
+  public userData= JSON.parse(sessionStorage.getItem("dataUser")); 
+  public Procedimientos = [];
   exportAsExcel(){
       const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -43,32 +45,48 @@ export class ReportsComponent implements OnInit, AfterViewInit {
 
     }
   constructor(public gQuery:gQueryService,public dialog: MatDialog, private router:Router, private _snackBar: MatSnackBar) {
+    if(this.userData.CodTipo == 0){
+      this.Procedimientos = [
+        {
+          Valor: "rpt_venta_x_cliente", 
+          Texto: "Compras por Cliente"
+        },
+        {
+          Valor: "rpt_flujo_caja", 
+          Texto: "Flujo de Caja"
+        },
+        {
+            Valor: "rpt_proyeccion_cliente", 
+            Texto: "Proyección de clientes"
+        },
+        {
+          Valor: "rpt_ventas_mensual", 
+          Texto: "Ventas Mensuales"
+        },
+    
+      ]
+    }else{
+      this.Procedimientos = [
+        {
+          Valor: "rpt_venta_x_cliente", 
+          Texto: "Compras por Cliente"
+        },
+        {
+            Valor: "rpt_proyeccion_cliente", 
+            Texto: "Proyección de clientes"
+        }
+      ]
+    }
+    
   }
   
   
   BuscarForm = new FormGroup({
     Reporte: new FormControl("",Validators.required)
   });
-
-  public Procedimientos = [
-    {
-      Valor: "rpt_venta_x_cliente", 
-      Texto: "Compras por Cliente"
-    },
-    {
-      Valor: "rpt_flujo_caja", 
-      Texto: "Flujo de Caja"
-    },
-    {
-        Valor: "rpt_proyeccion_cliente", 
-        Texto: "Proyección de clientes"
-    },
-    {
-      Valor: "rpt_ventas_mensual", 
-      Texto: "Ventas Mensuales"
-    },
-
-  ]
+if(){
+}
+  
 
   ngOnInit() {
   }

@@ -63,7 +63,16 @@
             </mat-select>
 
         </mat-form-field>
+        
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>connect_without_contact</mat-icon>
+            <mat-select formControlName="TipoContacto" placeholder="Tipo de contacto">
+              <mat-option *ngFor="let op of TipoContacto" [value]="op.Id" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
 
+        </mat-form-field style="width: 49.5%">
         <mat-form-field>
           <mat-icon matPrefix>place</mat-icon>
           <input type="text" matInput placeholder="Posición" readonly formControlName="Posicion" >
@@ -73,6 +82,17 @@
           </button>
           
         </mat-form-field>
+      </mat-form-field style="width: 49.5%">
+      <!-- <mat-form-field>
+        <mat-icon matPrefix>place</mat-icon>
+        <input type="text" matInput placeholder="Posición" readonly formControlName="Posicion" >
+        <button mat-raised-button matSuffix (click)="PosicionActual()">
+          Mi posición
+          <mat-icon>pin_drop</mat-icon>
+        </button>
+        
+      </mat-form-field> -->
+      
         <label class="custom-file-upload" style="margin-top:10px; cursor:default">
           <mat-icon>map</mat-icon>
           Marque la dirección del cliente:

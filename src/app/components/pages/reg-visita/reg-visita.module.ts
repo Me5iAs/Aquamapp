@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ReportesRoutingModule } from './reportes-routing.module';
-import { ReportesComponent } from './reportes.component';
+import { RegVisitaRoutingModule } from './reg-visita-routing.module';
+import { RegVisitaComponent } from './reg-visita.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import {MaterialModule} from "../../../material.module";
 
-
 @NgModule({
-  declarations: [ReportesComponent],
+  declarations: [RegVisitaComponent],
   imports: [
     CommonModule,
-    ReportesRoutingModule,
+    RegVisitaRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule,
+    FormsModule
   ]
 })
-export class ReportesModule { }
+export class RegVisitaModule { }

@@ -84,7 +84,7 @@ export class NuevoPedidoComponent implements OnInit {
     Cliente       : new FormControl("Anónimo", [Validators.required]),
     Cantidad      : new FormControl(10, [Validators.pattern("^[0-9]*$"), Validators.required]),
     Fecha_entrega : new FormControl(new Date(),[Validators.required]),
-    // Hora_entrega  : new FormControl("", [Validators.required]),
+    Hora_entrega  : new FormControl("8:00:00", [Validators.required]),
     Precio        : new FormControl(3.5 , [Validators.required]),
     Glosa         : new FormControl(" "),
     
@@ -138,23 +138,18 @@ export class NuevoPedidoComponent implements OnInit {
   }
 
   CargarPrecio(event){    
-    // console.log(event);
-    // console.log(event.option.value);
     var a = this.Clientes.filter( op => op.Nombre == event.option.value );
-    // console.log(a[0].Precio);
     this.PedidoForm.controls.Precio.setValue(Number(a[0].Precio));
     
   }
   onRegistrarPedido(data){
-    console.log(data.Cliente);
+    // console.log(data.Cliente);
     
     var IdCliente = this.Clientes.filter( op => op.Nombre == data.Cliente );
-    // console.log(IdCliente);
     
     var UsuarioI = JSON.parse(sessionStorage.getItem("dataUser"));
     if(!this.PedidoForm.valid){
       this._snackBar.open("llene correctamente los datos antes de continuar", "ok", {duration: 2000})
-      // alert("llene correctamente los datos antes de continuar");
       return;
     }
 
@@ -166,32 +161,50 @@ export class NuevoPedidoComponent implements OnInit {
 
     var target = document.getElementById('cargando_principal');
     target.style.display = "block"    
-
+    
+    let date = new Date(data.Fecha_entrega)
+    console.log(date);
+    
+      let day = date.getDate()
+      let month = date.getMonth() + 1
+      let year = date.getFullYear() 
+    // let sFecha = new Date(month + "-" + day + "-"+year);
+// console.log(sFecha)
+    // let dFecha = sFecha.toISOString().split('T')[0];   
+// console.log(dFecha)
+    // let dia = sFecha.getDate();
+    // let mes = sFecha.getMonth()+1;
+    // let ano = sFecha.getFullYear();
+    // let dFecha = ano + "-" + mes + "-" + dia; 
+    let dFecha = year + "-" + month + "-" + day;
+    console.log(dFecha)
+// return;
     this.gQuery.sql(
       "sp_pedido_registrar",
-      IdCliente[0].Id                              + "|" + 
-      UsuarioI.Id                                  + "|" + 
-      data.Cantidad                                + "|" +        
-      data.Precio                                  + "|" +        
-      data.Glosa
+      IdCliente[0].Id           + "|" + 
+      UsuarioI.Id               + "|" + 
+      data.Cantidad             + "|" +        
+      data.Precio               + "|" +        
+      data.Glosa                + "|" + 
+      dFecha                    + "|" + 
+      data.Hora_entrega
       ).subscribe(res =>{
         target.style.display = "none"
-        if(res[0].Estado==1){
+        if(res[0].Estado=="1"){
           this._snackBar.open(res[0].message, "ok", {duration: 2000})
-          // alert(res[0].message); 
-          // this.router.navigate(["/home"]);
           this.PedidoForm.controls.Cliente.setValue("Anónimo");
           this.PedidoForm.controls.Cantidad.setValue(10);
           this.PedidoForm.controls.Fecha_entrega.setValue(new Date());
           this.PedidoForm.controls.Precio.setValue(2.5);
           this.PedidoForm.controls.Glosa.setValue(" ");
-
-
         }else{
           alert("ERRROR" + "\n" +  res[0].message);
-          // this._snackBar.open(res[0].message, "ok", {duration: 2000})
         }
         
+      },
+      error => {
+        target.style.display = "none"
+        this._snackBar.open("ERROR: no se ha podido establecer conexion con el servidor (¿tienes Internet?)", "ok", {duration: 3000})
       }
     );
   

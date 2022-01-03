@@ -14,6 +14,10 @@ export class AtencionComponent implements OnInit {
   public Garantias;
   public Vales;
   public data;
+  public latitud;
+  public longitud;
+  public LatAct = null;
+  public LngAct = null;  
 
   EntregaForm = new FormGroup({
     Cantidad      : new FormControl(4, [Validators.required]),
@@ -57,6 +61,15 @@ export class AtencionComponent implements OnInit {
 
   
   ngOnInit() {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.LatAct= position.coords.latitude;
+      this.LngAct= position.coords.longitude;
+
+      
+    });
+    this.LatAct=-3.7722102000000004;
+    this.LngAct=-73.26553229999999;
+
     this.CargarPedido();  
   }
 
@@ -93,11 +106,12 @@ export class AtencionComponent implements OnInit {
     this.gQuery.sql(
       "sp_pedido_registrar_entrega",
       this.rutaActiva.snapshot.params.IdPedido  + "|" + 
-      UsuarioI.Id         + "|" + 
       data.Cantidad       + "|" + 
       a                   + "|" + 
       data.Vale           + "|" +
-      data.Garantia
+      data.Garantia       + "|" + 
+      this.LatAct         + "|" +
+      this.LngAct
       ).subscribe(res =>{
         target.style.display = "none"
         this._snackBar.open(res[0].message, "ok", {duration: 2000})
@@ -105,6 +119,9 @@ export class AtencionComponent implements OnInit {
         if(res[0].Estado==1){
           this.router.navigate(["/entrega"]);
         }         
+      }, error =>{
+        target.style.display = "none"
+        this._snackBar.open("Error: no se ha podido establecer conexión con la base de datos", "Error", {duration: 2000})
       });
     // console.log(data);
     

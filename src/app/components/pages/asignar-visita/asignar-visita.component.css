@@ -1,0 +1,79 @@
+mat-toolbar{
+  background: #004998 !important ;
+  background: -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  background: linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  color: #fff;
+
+}
+
+  
+.container{
+  
+  margin: 0 auto;
+  padding: 10px ;
+  justify-content: center;
+
+}
+table{
+  width: 100%;
+  border-collapse: collapse; 
+}  
+
+.centrar{
+text-align: center;
+}
+
+td, th{
+  padding: 5px !important;
+  border: 1px solid #c3c3c3;
+}
+
+
+
+.rate mat-icon {
+  font-size : 14px;
+  height: auto;
+  width: auto;
+  color: #F6BE00;
+  text-shadow: 0.5px 0.5px 0px black;
+}
+  
+.SubTituloCh{
+  display: block;
+  color: #A4A4A4;
+  text-decoration: none;
+  font-family: 'Roboto',Arial;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0px 
+}
+
+
+.SubTituloGr{
+  display: block;
+  color: #696969;
+  text-decoration: none;
+  font-family: 'Roboto',Arial;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 667px) {
+  .no_mobile {
+    display: none;
+  }
+  .mobile {
+    display:table-cell;
+  }
+}
+@media screen and (min-width: 668px) {
+  .mobile {
+    display:none;
+  }
+  .no_mobile {
+    display: table-cell;
+  }
+  
+}

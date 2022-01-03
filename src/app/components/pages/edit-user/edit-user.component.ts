@@ -22,6 +22,7 @@ export class EditUserComponent implements OnInit {
   public LngAct = null;
   public Botellones;
   public Precios;
+  public TipoContacto;
 
   @ViewChild(AgmMap) public agmMap: AgmMap
 
@@ -31,6 +32,13 @@ export class EditUserComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private rutaActiva: ActivatedRoute,
     private enviandoImagen:SubirService) {
+
+      this.TipoContacto = [
+        {Id:"1", Texto: "Visita a local"},
+        {Id:"2", Texto: "Llamada telefónica"},
+        {Id:"3", Texto: "Whatsapp"},
+        {Id:"4", Texto: "No desea ser contactado"},
+      ]
 
       this.Precios = [
         {Valor: 2, Texto: "S/ 2.00"},
@@ -64,6 +72,7 @@ export class EditUserComponent implements OnInit {
     Foto      : new FormControl("", [Validators.required]),
     TipoCliente: new FormControl("", [Validators.required]),
     Botellones: new FormControl("", [Validators.required]),
+    TipoContacto: new FormControl("",[Validators.required]),
     Precio: new FormControl("", [Validators.required])
   });
 
@@ -94,6 +103,7 @@ export class EditUserComponent implements OnInit {
       this.ClienteForm.controls.TipoCliente.setValue(Number(data[0].TipoCliente));
       this.ClienteForm.controls.Botellones.setValue(Number(data[0].Botellones));
       this.ClienteForm.controls.Precio.setValue(Number(data[0].Precio));
+      this.ClienteForm.controls.TipoContacto.setValue((data[0].TipoContacto));
       
       console.log(data[0].Precio);
       
@@ -137,6 +147,7 @@ export class EditUserComponent implements OnInit {
     ]
 
   }
+  
 
   agregar_marcador($event){
       this.latitud = $event.coords.lat;
@@ -173,7 +184,8 @@ export class EditUserComponent implements OnInit {
       a[1]                + "|" +
       data.TipoCliente    + "|" +
       data.Botellones     + "|" +
-      data.Precio
+      data.Precio         + "|" +
+      data.TipoContacto
       ).subscribe(res =>{
         
         if(res[0].Estado==1){
