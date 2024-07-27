@@ -1,0 +1,171 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Clientes</span>
+  <button mat-icon-button><mat-icon routerLink="/new_cliente" >person_add</mat-icon></button>
+  
+  
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card [class.oculto]="dataSource==null">
+    <mat-card-content >
+      <mat-form-field style="width: 50%">
+        <mat-label>Buscar clientes</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput (keyup)="aplicarFiltroTexto($event)" placeholder="Ej. Juan Perez">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <a mat-raised-button matSuffix href='/#/pos_clientes' style="margin-left:10px">
+        <mat-icon>pin_drop</mat-icon>
+      </a>
+      <button mat-raised-button (click)="limpiarFiltros()" style="margin-left: 10px;">
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+        
+      <div  class="filter-container" style="text-align: center;">
+        <p style="margin-top: 10px;">filtrar por Segmento o Riesgo:
+            <mat-icon (click)="mostrarMensaje()" style="font-size: 12px; position: relative; top: -8px; cursor:pointer; left:-8px; color:rgba(0,0,0,0.35)">info</mat-icon>
+        </p>
+        <mat-button-toggle-group class="filter-group-seg" (change)="aplicarFiltroCategoria($event)" #GrupoBotonesCategoria="matButtonToggleGroup">
+          <mat-button-toggle value="A"><span class="bSegmento SegA">A</span>  </mat-button-toggle>
+          <mat-button-toggle value="B"><span class="bSegmento SegB">B</span></mat-button-toggle>
+          <mat-button-toggle value="C"><span class="bSegmento SegC">C</span></mat-button-toggle>
+          <mat-button-toggle value="D"><span class="bSegmento SegD">D</span></mat-button-toggle>
+          <mat-button-toggle value="E"><span class="bSegmento SegE">E</span></mat-button-toggle>
+
+        </mat-button-toggle-group>
+      
+        <mat-button-toggle-group class="filter-group" (change)="aplicarFiltroNivelRiesgo($event)" #GrupoBotonesRiesgo="matButtonToggleGroup">
+          <!-- <mat-button-toggle value="">Todos</mat-button-toggle> -->
+          <mat-button-toggle value="Normal">
+            <mat-icon style="color: green;">verified</mat-icon>
+            <span class="filtroRiesgo">Normal</span>
+            <span class="PorcentajeRiesgo">({{((Riesgos.Normal / Total)*100).toFixed(0) }}%)</span>
+          </mat-button-toggle>
+
+          <mat-button-toggle value="Dudoso">
+            <mat-icon style="color: gold;">warning</mat-icon>
+            <span class="filtroRiesgo">Dudoso</span>
+            <span class="PorcentajeRiesgo">({{((Riesgos.Dudoso / Total)*100).toFixed(0) }}%)</span>
+          </mat-button-toggle>
+          
+          <mat-button-toggle value="Riesgo">
+            <mat-icon style="color: red;">error</mat-icon>
+            <span class="filtroRiesgo">Riesgo</span>
+            <span class="PorcentajeRiesgo">({{((Riesgos.Riesgo / Total)*100).toFixed(0) }}%)</span>
+          </mat-button-toggle>
+
+          <mat-button-toggle value="Perdida">
+            <mat-icon style="color: black;">report</mat-icon>
+            <span class="filtroRiesgo">Pérdida</span>
+            <span class="PorcentajeRiesgo">({{((Riesgos.Perdida / Total)*100).toFixed(0) }}%)</span>
+          </mat-button-toggle>
+        </mat-button-toggle-group>       
+      </div>
+
+      <div style="margin:auto; margin: 12px">
+        <div style="display: inline-block; background-color:green; height:10px; border-radius: 5px 0px 0px 5px;" [style.width.%]="((Riesgos.Normal / Total)*100)"> </div>
+        <div style="display: inline-block; background-color:gold; height:10px" [style.width.%]="((Riesgos.Dudoso / Total)*100)"> </div>
+        <div style="display: inline-block; background-color:red; height:10px" [style.width.%]="((Riesgos.Riesgo / Total)*100)"> </div>
+        <div style="display: inline-block; background-color:black; height:10px; border-radius: 0px 5px 5px 0px;" [style.width.%]="((Riesgos.Perdida / Total)*100)"> </div>
+      </div>
+
+
+
+      <table mat-table [dataSource]="dataSource" style="width:100%" matSort>
+        
+        <ng-container matColumnDef="Rate">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Seg </th>
+          <td mat-cell *matCellDef="let element" class="cel" style="padding: 0px; padding-right: 10px;"> 
+
+            <div class="Segmento SegA" *ngIf="element.Segmento=='A'">{{element.Segmento}}</div>
+            <div class="Segmento SegB" *ngIf="element.Segmento=='B'">{{element.Segmento}}</div>
+            <div class="Segmento SegC" *ngIf="element.Segmento=='C'">{{element.Segmento}}</div>
+            <div class="Segmento SegD" *ngIf="element.Segmento=='D'">{{element.Segmento}}</div>
+            <div class="Segmento SegE" *ngIf="element.Segmento=='E'">{{element.Segmento}}</div>
+
+         
+         
+          </td>
+        </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="Clientes">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Cliente </th>
+          <td mat-cell *matCellDef="let element" class="cel"  routerLink="/edit_user/{{element.Id}}" > 
+        
+            <span class="cliente_celda">
+             
+              {{element.Nombre}}
+            </span>
+            <span class="subcelda">{{element.Direccion}} - {{element.Referencia}} </span>
+            <span class="Estado Normal" *ngIf="element.EstadoRecencia=='Normal'" > Normal </span>
+            <span class="Estado Dudoso" *ngIf="element.EstadoRecencia=='Dudoso'" >Dudoso </span>
+            <span class="Estado Riesgo" *ngIf="element.EstadoRecencia=='Riesgo'" > Riesgo </span>
+            <span class="Estado Perdida" *ngIf="element.EstadoRecencia=='Perdida'" > Perdida </span>
+            <!-- <button mat-button routerLink="/edit_user/:{{element.Id}}">{{element.Nombre}}</button> -->
+            
+          </td>
+        </ng-container>
+ 
+  
+               
+        <ng-container matColumnDef="Pos">
+          <th mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
+          <td mat-cell *matCellDef="let element" class="cel" > 
+            <button mat-icon-button (click)="abrirPosCliente(element)">
+              <mat-icon class="mat-18">person_search</mat-icon>
+          </button>
+            
+          </td>
+          
+        </ng-container>
+
+        <ng-container matColumnDef="Del">
+          <th [ngClass]="esRoot==false ? 'oculto' : ''" mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
+          <td [ngClass]="esRoot==false ? 'oculto' : ''" mat-cell *matCellDef="let element" class="cel"  style="padding: 0px; "> 
+            <button mat-icon-button (click)="eliminarCliente(element)">
+              <mat-icon class="mat-18">highlight_off</mat-icon>
+          </button>
+            
+          </td>
+          
+        </ng-container>
+      
+       
+        <!-- <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr> -->
+        <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+      </table>
+    </mat-card-content>
+    <mat-card-footer>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50" showFirstLastButtons></mat-paginator>
+    </mat-card-footer>
+  </mat-card>
+
+  <mat-card *ngIf="dataSource==null">
+    <mat-card-header>
+      <mat-card-title>No se encuentran clientes</mat-card-title>
+      <mat-card-subtitle>Actualmente el sistema no tiene registrado ningun cliente activo.</mat-card-subtitle>
+    </mat-card-header>
+  <mat-card-content style="text-align: center;">
+    elija una opcion:
+  </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button routerLink="/new_cliente">
+        <mat-icon >person_add</mat-icon>
+        Nuevo Cliente
+      </button>
+   
+      <button mat-button routerLink="/">
+        <mat-icon >home</mat-icon>
+        Ir al inicio
+      </button>
+   
+
+
+    </mat-card-actions>
+  </mat-card>
+
+
+</div>

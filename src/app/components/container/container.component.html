@@ -1,0 +1,36 @@
+<div class=container>
+  <div class="subcontainer">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="footer">
+    <table style="width: 100%; text-align: center;">
+      <tr>
+        <td>
+          <button mat-icon-button [routerLink]="'/home'">
+            <mat-icon>home</mat-icon>
+          </button>
+          <div class="item">Inicio </div>
+        </td>
+
+
+        <td *ngFor="let op of Menu">
+          <button mat-icon-button [routerLink]="op.Link" *ngIf="op.TipoMenu != 'Submenu'">
+            <mat-icon> {{op.Icono}} </mat-icon>
+          </button>
+          <div class="item">{{op.Item}} </div>
+        </td>
+
+        <td>
+          <button mat-icon-button (click)="onLogout()">
+            <mat-icon>exit_to_app</mat-icon>
+          </button>    
+          <div class="item">Salir</div>  
+        </td>
+      </tr>
+    </table>
+
+
+
+  </div>
+</div>

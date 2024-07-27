@@ -1,0 +1,64 @@
+<!-- "Info"|"Editar"|"Eliminar"|"Nuevo" -->
+
+<button mat-icon-button style='float:right' (click)="onCancel()" [mat-dialog-close]="false">
+  <mat-icon>close</mat-icon>
+</button>
+
+<h1 style="text-align: center;" mat-dialog-title *ngIf="dataUsu.Accion=='Nuevo'">Nuevo Usuario</h1>
+<h1 style="text-align: center;" mat-dialog-title *ngIf="dataUsu.Accion=='Edit'">Editar Usuario</h1>
+<div mat-dialog-content>
+  
+    <form [formGroup]="UsuarioForm" style="text-align: center;">
+            
+      <mat-form-field class="imputsform">
+        <mat-label>Usuario</mat-label>
+        <input type="text" matInput placeholder="Usuario" formControlName="Usuario" >
+      </mat-form-field>
+      
+      <mat-form-field class="imputsform">
+        <mat-label>Nombre</mat-label>
+        <input type="text" matInput placeholder="Nombre" formControlName="Nombre" >
+      </mat-form-field>
+
+      <mat-form-field class="imputsform" >
+        <mat-icon matPrefix>attach_money</mat-icon>
+          <mat-select formControlName="Tipo" placeholder="Tipo Usuario" [disabled]="!EsRoot" >
+            <mat-option *ngFor="let op of TiposUsuario" [value]="op.Valor" >
+             {{op.Texto}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="imputsform"> 
+        <mat-label>Fecha Nac.</mat-label>
+        <input readonly="true" matInput [matDatepicker]="picker" formControlName="FechaNac">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="imputsform">
+        <mat-label>Telefono</mat-label>
+        <input type="text" matInput placeholder="Telefono" formControlName="Telefono" >
+      </mat-form-field>
+    
+      <mat-form-field class="imputsform">
+        <mat-label>Direccion</mat-label>
+        <input type="text" matInput placeholder="Direccion" formControlName="Direccion" >
+      </mat-form-field>
+
+      <mat-form-field class="imputsform"> 
+        <mat-label>Fecha Ingreso a Trab.</mat-label>
+        <input readonly="true" matInput [matDatepicker]="picker2" formControlName="FechaInicio">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+    </form>
+</div>
+<div mat-dialog-actions style="text-align:center">
+  <!-- <button mat-raised-button (click)="onCancel()" [mat-dialog-close]="false" color="warn">Cancelar</button> -->
+  <!-- <button mat-raised-button *ngIf="dataUsu.Accion=='Info'" (click)="onUpdateMov(UsuarioForm.value)" [mat-dialog-close]="true"  style="background:#004998; color: #fff">Actualizar</button> -->
+  <button mat-raised-button (click)="onUpdateUsu(UsuarioForm.value)" [mat-dialog-close]="true"  color="warn" >Actualizar</button>
+  <!-- <button mat-raised-button *ngIf="dataUsu.Accion=='Nuevo'" (click)="onNewMov(UsuarioForm.value)" [mat-dialog-close]="true" [disabled]="!UsuarioForm.valid" style="background:#004998; color:#fff">Reg. Movimiento</button> -->
+</div>
+

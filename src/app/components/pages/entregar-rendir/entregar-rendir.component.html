@@ -1,0 +1,168 @@
+<mat-toolbar>
+
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Rendir Cuenta</span>
+ 
+  
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card>
+    <form [formGroup]="RendirForm">
+      <mat-form-field>
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-label>Seleccione repartidor</mat-label>
+        <mat-select formControlName="Usuario" placeholder="Repartidor" (ngModelChange)="CargarPedidosPorRendir()">
+          <mat-option *ngFor="let op of Repartidores" [value]="op.Id" >
+            {{op.Usuario}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <mat-card-content *ngIf="Pedidos.length>0">
+      <h2>Cobranza</h2>
+      <table style="width: 100%; border: 1px solid #c3c3c3" border="1">
+        <tr>
+          <th rowspan="2"></th>
+          <th rowspan="2">Cliente</th>
+
+          <th colspan="2">Enviado</th>
+          <th colspan="2">Entregado</th>
+          <th rowspan="2">Crédito S/</th>
+          <th rowspan="2">Transf S/</th>
+          <th rowspan="2">Efectivo S/</th>
+        </tr>
+        <tr>
+          <th>S/ Bot</th>
+          <!-- <th>Bot</th> -->
+          <th>S/ Paq</th>
+          <th>S/ Bot</th>
+          <!-- <th>Bot</th> -->
+          <th>S/ Paq</th>
+          <!-- <th>Paq</th> -->
+          <!-- retirado  -->
+          <!-- <th>Vales</th>
+          <th>Garantía</th> --> 
+          <!-- Agregado -->
+        </tr>
+
+        <tr *ngFor="let op of Pedidos" [ngClass]="op.Estado=='Rechazado' ? 'rojo' : ''" >
+          <!-- icono -->
+          <td>
+            <mat-icon *ngIf="op.Estado=='Rechazado'" class="mat-18 rojo" mat-raised-button matTooltip="Rechazado" style="cursor:help;"> warning</mat-icon>
+            <mat-icon *ngIf="op.Estado!='Rechazado'" class="mat-18" mat-raised-button matTooltip="Entregado" style="color:green; cursor:help;">info</mat-icon>
+          </td>
+
+          <!-- cliente -->
+          <td>{{op.Cliente}} </td>
+
+          <!-- Bot Enviado -->
+          <td>{{op.CantidadEnvio}}</td>
+
+          <!-- Paq Enviado -->
+          <td>{{op.CantidadPaqEnvio}}</td>
+         
+          <!-- si fue rechazado agrupa 4 columnas y pone la glosa -->
+          <td colspan="4" *ngIf="op.Estado=='Rechazado'" >
+            {{op.Glosa}}
+          </td>
+           <!-- Bot Enviado -->
+           <td style= "text-align: center;" *ngIf="op.Estado!='Rechazado'">
+            {{op.Cantidad}} x S/ {{op.Precio | number:'1.2-2' }}
+          </td>
+
+          <!-- Paq Enviado -->
+          <td style= "text-align: center;" *ngIf="op.Estado!='Rechazado'" >
+            {{op.CantidadPaq}} x S/ {{op.PrecioPaq | number:'1.2-2' }}
+          </td>
+  
+          <!-- Credito -->
+          <td *ngIf="op.Estado!='Rechazado'" style= "text-align: center;">
+            <span *ngIf="op.EstadoPago=='0'">
+              {{Numero((op.Cantidad * op.Precio) + (op.CantidadPaq * op.PrecioPaq))  | number:'1.2-2' }} 
+            </span>
+            <span *ngIf="op.EstadoPago=='1'">
+              0.00
+            </span>
+            
+          </td>
+
+          <!-- transferencia  -->
+          <td *ngIf="op.Estado!='Rechazado'" style= "text-align: center;">
+            <span *ngIf="op.EstadoPago == '1' && op.TipoPago =='1'">
+              {{Numero((op.Cantidad * op.Precio) + (op.CantidadPaq * op.PrecioPaq))  | number:'1.2-2' }} 
+            </span>
+            <span *ngIf="!(op.EstadoPago == '1' && op.TipoPago =='1')">
+              0.00
+            </span>
+            
+          </td>
+
+          <!-- pagado -->
+          <td *ngIf="op.Estado!='Rechazado'" style= "text-align: center;">
+            <span *ngIf="op.EstadoPago=='1' && op.TipoPago=='0'">
+              {{Numero((op.Cantidad * op.Precio) + (op.CantidadPaq * op.PrecioPaq))  | number:'1.2-2' }} 
+            </span>
+            <span *ngIf="!(op.EstadoPago=='1' && op.TipoPago=='0')">
+              0.00
+            </span>
+            <!-- {{Numero((op.Cantidad * op.Precio) + (op.CantidadPaq * op.PrecioPaq) - (op.Precio * op.Vales)) + Numero(op.Garantia)  | number:'1.2-2' }}  -->
+          </td>
+  
+        </tr>
+
+        <tr>
+          <td colspan="2">Total</td>
+          <td>{{TotalBotEnviado}}</td>
+          <td>{{TotalPaqEnviado}}</td>
+          <td style="text-align: center;">{{TotBot}}</td>
+          <!-- <td style="text-align: center;"></td> -->
+          <td style="text-align: center;">{{TotPaq}}</td>
+          <!-- <td style="text-align: center;">{{TotVale}}</td> -->
+          <td style="text-align: center;">{{this.TotalCred | number:'1.2-2'}}</td>
+          <td style="text-align: center;">{{this.TotalTransf | number:'1.2-2'}}</td>
+          <td style="text-align: center;">{{this.TotalSol | number:'1.2-2'}}</td>
+        </tr>
+      </table> 
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card style="margin-top:15px" *ngIf="Pedidos.length>0">
+    <mat-card-content>  
+     <div>
+      <h1>Kardex de Productos</h1>
+      <table border=1 style="width: 100%; border:1px; text-align: center; border-color: #c3c3c3">
+        <tr>
+          <th >Concepto</th>
+          <th >Enviados</th>  
+          <th>Bot Vacios / Paq Entregados</th>
+          <th>Bot Llenos regresan / Paq Regresan </th>
+        </tr>
+        <tr>
+          <td>Botellones</td>
+          <td>{{TotalBotEnviado}}</td>
+          <td>{{TotBot}}</td>
+          <td>{{TotalBotEnviado - TotBot}} </td>
+        </tr>
+        <tr>
+          <td>Paquetes</td>
+          <td>{{TotalPaqEnviado}}</td>
+          <td>{{TotPaq}} </td>
+          <td>{{TotalPaqEnviado - TotPaq}}</td>
+        </tr>
+      </table>
+     </div>
+
+    </mat-card-content>
+
+    <mat-card-footer *ngIf="Pedidos.length>0" style="text-align: center;">
+      <button mat-raised-button class="aceptar" (click)="onAtenderPedidos()" style="margin: 5px;">
+        <mat-icon matPrefix>check</mat-icon>
+        Rendir
+      </button>
+    </mat-card-footer>
+
+  </mat-card>
+
+</div>

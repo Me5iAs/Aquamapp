@@ -1,0 +1,91 @@
+mat-toolbar{
+  background: #004998 !important ;
+  background: -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  background: linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  color: #fff;
+  position: absolute;
+  z-index: 1000;
+  top: 0px;
+}
+.container{
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+.cel:hover{
+  background: #F2F3F5;
+  cursor: pointer,
+}
+
+.oculto{
+  display: none;
+}
+  
+
+.subcelda{
+  display: block;
+  font-size: 12px;
+  color: rgba(96,93,92,.87);
+  font-weight: 500;
+  font-family:Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.cliente_celda{
+  display:block; 
+  color:rgb(31,26,23); 
+  font-weight: 400;
+  text-shadow: 0px 0px 2px #c3c3c3;
+}
+.button_ac{
+  background: #5e6063 !important;
+  width: 100%;
+  color: #Fff;
+}
+
+.rojo {
+  color:red !important;
+}
+.table{
+  width: 100%;
+  border-collapse: collapse; 
+}  
+
+
+.table tr:first{
+  text-align: center;
+}
+
+
+.table th {
+  padding: 10px 10px 10px 10px;
+  background: #004998;
+  color: #fff;
+}
+
+.table tr:last-child td { 
+  background-color: #004998;
+  color:#fff
+}
+
+.table tr:last-child td mat-icon { 
+  color:#fff
+}
+
+
+.table tr {
+  height: 50px;
+  /* border-bottom: 1px solid rgba(0,0,0,0.4); */
+}
+
+
+
+tr:nth-child(even) td { background: #F1F1F1; } 
+
+tr:nth-child(odd) td { background: #FEFEFE; }
+
+/* tr:hover { background: #666; } */

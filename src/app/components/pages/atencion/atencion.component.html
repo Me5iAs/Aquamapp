@@ -1,0 +1,112 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/entrega" >arrow_back</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Registrar Atención</span>
+  <!-- <button mat-icon-button><mat-icon (click)="onRegistrarAtencion(EntregaForm.value)" >check</mat-icon></button> -->
+  
+  
+</mat-toolbar>
+
+<div class="container" *ngIf="data">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> {{data.Cliente}} </mat-card-title>
+      <mat-card-subtitle *ngIf="data.Direccion" > 
+        {{data.Direccion}} + {{data.Referencia}} 
+      </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="data.Telefono" >Telefono: {{data.Telefono}} </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="data.Commentario == ' '">Glosa: {{data.Comentario}} </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <button mat-raised-button (click)="VerMapa(data.Latitud, data.Longitud)" style="cursor: pointer; margin: auto auto 15px auto; display: block;">
+        ver mapa 
+        <mat-icon Suffix  >map</mat-icon>
+        
+      </button>
+      <form [formGroup]="EntregaForm">
+        
+
+        
+        
+        <!-- BOTELLONES -->
+        <mat-form-field style="width: 100%;  max-width: 500px; display:block; margin:auto">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="Cantidad" placeholder="N° de Botellones vendidos">
+              <mat-option *ngFor="let op of Botellones" [value]="op.Cantidad" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- PAQUETES -->
+        <mat-form-field style="width: 100%; max-width: 500px; display:block; margin:auto">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="CantidadPaq" placeholder="N° de Paquetes vendidos">
+              <mat-option *ngFor="let op of Paquetes" [value]="op.Cantidad" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <!-- GARANTIAS -->
+        <!-- <mat-form-field style="width: 45%; max-width: 500px; min-width: 150px;">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+          <mat-select formControlName="Garantia" placeholder="Pago de Garantía">
+            <mat-option *ngFor="let op of Garantias" [value]="op.Cantidad" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        
+        <!-- VALES -->
+        <!-- <mat-form-field style="width: 45%; float:right; max-width: 500px; min-width: 150px;">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+          <mat-select formControlName="Vale" placeholder="Uso de vale">
+            <mat-option *ngFor="let op of Vales" [value]="op.Cantidad" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+
+
+
+
+
+       <div style="width: 100%; max-width: 500px; display:block; margin:auto; text-align: center;">
+        
+       
+        <h3 style="text-align: center">total a pagar:</h3>
+        <h1 style="text-align: center; font-size: 250%; font-weight: bold;">
+          S/ {{
+            data.Precio * EntregaForm.controls.Cantidad.value - 
+            data.Precio * EntregaForm.controls.Vale.value + 
+            EntregaForm.controls.Garantia.value + 
+            data.PrecioPaq * EntregaForm.controls.CantidadPaq.value
+            }} 
+        </h1>
+        
+        <!-- <mat-checkbox formControlName="EstadoPago" >
+          Pagado 
+
+        </mat-checkbox> -->
+        <mat-button-toggle-group formControlName="EstadoPago" aria-label="Estado de Pago">
+          <mat-button-toggle value="0">Crédito</mat-button-toggle>
+          <mat-button-toggle value="1">Efectivo</mat-button-toggle>
+          <mat-button-toggle value="2">Transferencia</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div> 
+      </form>
+
+
+    </mat-card-content>
+    <mat-card-actions style="text-align: center;">
+      <button mat-raised-button (click)="onRegresar()" >Regresar</button>
+      <button mat-raised-button 
+        color="primary"
+        (click)="onRegistrarAtencion(EntregaForm.value)"
+        [disabled]="!(EntregaForm.controls.EstadoPago.value !== null && EntregaForm.controls.EstadoPago.value !== '')"
+      >Registrar</button>
+    </mat-card-actions>
+     
+  </mat-card>
+</div>

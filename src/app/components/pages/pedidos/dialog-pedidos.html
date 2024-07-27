@@ -1,0 +1,62 @@
+<!-- "Info"|"Editar"|"Eliminar"|"Nuevo" -->
+
+<button mat-icon-button style='float:right' (click)="onCancel()" [mat-dialog-close]="false">
+  <mat-icon>close</mat-icon>
+</button>
+
+<h1 style="text-align: center;" mat-dialog-title>Editar Pedido</h1>
+<div mat-dialog-content>
+  
+    <form [formGroup]="CantidadesForm" style="text-align: center;">
+      
+
+      <mat-form-field>
+        <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+          <mat-select formControlName="CantidadBot" placeholder="N° de Botellones">
+            <mat-option *ngFor="let op of Botellones" [value]="op.Cantidad" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-icon matPrefix>attach_money</mat-icon>
+          <mat-select formControlName="PrecioBot" placeholder="Precio">
+            <mat-option *ngFor="let op of PreciosBot" [value]="op.Valor" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+          <mat-select formControlName="CantidadPaq" placeholder="N° de Paquetes">
+            <mat-option *ngFor="let op of Paquetes" [value]="op.Cantidad" >
+              {{op.Texto}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-icon matPrefix>attach_money</mat-icon>
+          <mat-select formControlName="PrecioPaq" placeholder="Precio Paq">
+            <mat-option *ngFor="let op of PreciosPaq" [value]="op.Valor" >
+             S/ {{op.Valor}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <input type="text" matInput placeholder="Comentario" formControlName="Comentario" >
+      </mat-form-field>
+      
+    
+  </form>
+</div>
+<div mat-dialog-actions style="text-align:center; justify-content: center;">
+  <!-- <button mat-raised-button (click)="onCancel()" [mat-dialog-close]="false" color="warn">Cancelar</button> -->
+  <button mat-raised-button (click)="onUpdateMov(CantidadesForm.value)" [mat-dialog-close]="true"  style="background:#004998; color: #fff; float:auto">Actualizar</button>
+
+</div>
+

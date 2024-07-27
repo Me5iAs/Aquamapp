@@ -1,0 +1,27 @@
+
+
+<mat-card>
+  <mat-card-header>
+    <mat-icon class="cancel_icon" (click)="onCancel()">cancel</mat-icon>
+    <mat-card-title *ngIf="data.Titulo" >{{data.Titulo}} </mat-card-title>
+    <mat-card-subtitle *ngIf="data.Subtitulo" > {{data.Subtitulo}}</mat-card-subtitle>
+  </mat-card-header>
+  
+    <mat-form-field>
+      <mat-label>Criterio</mat-label>
+      <input  (keydown.enter)="onBuscar()" matInput [(ngModel)]="data.Valor" placeholder="Ejm. Juan Perez">
+      <mat-icon style='margin-right:8px'  matSuffix (click)="onBuscar()" >search</mat-icon>
+    </mat-form-field>
+      
+    <table *ngIf="mostrar" mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort style="width: 100%">
+      <ng-container *ngFor="let disCol of displayedColumns" matColumnDef="{{disCol}}">
+        <th mat-header-cell *matHeaderCellDef  mat-sort-header> {{disCol}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[disCol]}} </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr class="fila" mat-row *matRowDef="let row; columns: displayedColumns;"  [mat-dialog-close]="row"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+
+</mat-card>

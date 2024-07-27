@@ -1,0 +1,90 @@
+mat-toolbar {
+  background: #004998 !important;
+  background: -moz-linear-gradient(45deg, #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg, #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: linear-gradient(45deg, #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  color: #fff;
+}
+.oculto {
+  display: none;
+}
+.container {
+  /* max-width: 800px; */
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 10px;
+  justify-content: center;
+}
+table {
+  width: 100%;
+}
+.verde {
+  color: #008000;
+  font-family: 'Roboto', Arial;
+  font-size: 20.3pt;
+}
+.rojo {
+  color: #d2691e;
+  font-family: 'Roboto', Arial;
+  font-size: 20.3pt;
+}
+.ocultar {
+  display: none;
+}
+@media screen and (max-width: 667px) {
+  .no_mobile {
+    display: none;
+  }
+}
+@media screen and (min-width: 668px) {
+  .mobile {
+    display: block;
+  }
+}
+.SubTituloCh {
+  display: block;
+  color: #a4a4a4;
+  text-decoration: none;
+  font-family: 'Roboto', Arial;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0px;
+}
+.SubTituloGr {
+  display: block;
+  color: #696969;
+  text-decoration: none;
+  font-family: 'Roboto', Arial;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.imputsform{
+  width: 90% !important;
+}
+
+:host ::ng-deep .mat-sort-header-container { 
+  display: flex;  
+  justify-content: left; 
+}
+
+
+th.mat-header-cell { 
+  text-align: right; 
+}
+
+.TotalPlanilla{
+  float: right;
+  margin: 10px;
+  width: 65px;
+  text-align: right;
+  margin-right: 30px;
+  /* font-size: 20px; */
+}
+
+.TotalPlanilla input{
+  font-size: 20px;
+  font-weight: bold;
+}
+

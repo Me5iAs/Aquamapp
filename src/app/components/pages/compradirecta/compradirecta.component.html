@@ -1,0 +1,89 @@
+<mat-toolbar>
+  <!-- <button mat-icon-button>
+    <mat-icon (click)="onCancelar()" >arrow_back</mat-icon>
+  </button> -->
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Compra en Fabrica
+  </span>
+  <button mat-icon-button>
+  <mat-icon (click)="onRegistrarPedido(PedidoForm.value)" >check</mat-icon>
+</button>
+</mat-toolbar>
+<div class="container" >
+
+  <mat-card>
+    <mat-card-content >
+      <form [formGroup]="PedidoForm"> 
+        <mat-form-field>
+          <mat-icon matPrefix>person</mat-icon>
+          <input type="text"
+            placeholder="Seleccione Cliente"
+            aria-label="Number"
+            matInput
+            formControlName="Cliente"
+            [matAutocomplete]="auto" 
+            (click)="onFocusEvent($event)" 
+          >
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="CargarPrecio($event) ">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.Nombre">
+              {{option.Nombre}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+  
+        <!-- Numero de botellones -->
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="Cantidad" placeholder="N° de Botellones">
+              <mat-option *ngFor="let op of Botellones" [value]="op.Cantidad" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Precio Botellones -->
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>attach_money</mat-icon>
+            <mat-select formControlName="Precio" placeholder="Precio" [attr.disabled]='!UsuarioEditaPrecio'>
+              <mat-option *ngFor="let op of PreciosBot" [value]="op.Valor" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 49.5%">
+          <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="CantidadPaq" placeholder="N° de Paquetes">
+              <mat-option *ngFor="let op of Paquetes" [value]="op.Cantidad" >
+                {{op.Texto}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 49.5%" >
+          <mat-icon matPrefix>attach_money</mat-icon>
+            <mat-select formControlName="PrecioPaq" placeholder="Precio Paq" [attr.disabled]='!UsuarioEditaPrecio' >
+              <mat-option *ngFor="let op of PreciosPaq" [value]="op.Valor" >
+               S/ {{op.Valor}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <mat-icon matPrefix>chat</mat-icon>
+          <textarea matInput placeholder="Comentarios (Para anónimos: Teléfono, dirección y referencia )" formControlName="Glosa"></textarea>
+        </mat-form-field> 
+              
+         
+      </form>
+
+    </mat-card-content>
+    <mat-card-actions style="text-align: center;">
+      <button mat-raised-button class="aceptar" (click)="onRegistrarPedido(PedidoForm.value)">
+        <mat-icon matPrefix>check</mat-icon>
+        Registrar
+      </button>
+    </mat-card-actions>
+</mat-card>
+</div>

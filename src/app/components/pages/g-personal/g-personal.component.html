@@ -1,0 +1,342 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Gestión de Personal</span>
+  <button mat-icon-button><mat-icon routerLink="/new_cliente" >person_add</mat-icon></button>
+  
+  
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card>
+    <mat-card-content>
+
+
+      <mat-tab-group mat-align-tabs = "start" >
+      
+        <!-- ASISTENCIA -->
+        <mat-tab>
+
+          <!-- Tab -->
+          <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 10px;" class="example-tab-icon">today</mat-icon>
+            Asistencia
+          </ng-template>
+
+          <mat-card>
+            <mat-card-content>
+              <!-- Feca de asistencia -->
+              <form [formGroup]="BuscarAsistenciaForm" (ngSubmit)="cargarAsistencia()">
+                <mat-form-field  style="width: 135px">
+                  <mat-icon matPrefix style="margin-right: 10px;">calendar_today</mat-icon>
+                  <input matInput  [matDatepicker]="patientDueDate_i" placeholder="F. Asistencia" formControlName="FechaAsist" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="patientDueDate_i"></mat-datepicker-toggle>
+                    <mat-datepicker #patientDueDate_i></mat-datepicker>   
+                </mat-form-field> 
+                <button mat-icon-button type="submit">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </form>
+
+              <table mat-table [dataSource] = "dataAsistencia" style="width: 100%;" matSort>
+
+                <!-- ColumnasAsistencia: string[] = ["Usuario", "TM", "TMIngreso", "TMSalida", "TT", "TTIngreso", "TTSalida"] -->
+                
+                <!-- usuario -->
+                <ng-container matColumnDef="Usuario" style="justify-content: left !important;">
+                  <th mat-header-cell *matHeaderCellDef style="justify-content: left !important" mat-sort-header> Usuario </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.Usuario}}</td>
+                </ng-container>
+
+                <!-- ingreso en la mañana? -->
+                <ng-container matColumnDef="TM">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header style='width: 25px; padding-left: 5px;'> AM? </th>
+                  <td mat-cell *matCellDef="let element"> 
+                    <mat-checkbox [checked]="toCheck(element.T_Manana)" (change)="onActualizarCampoAsistencia(element.Id, 'T_Manana', $event.checked);desactivarText(element.Id, 'm',$event.checked); " color="primary" > 
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <!-- Hora de ingreso mañana -->
+                <ng-container matColumnDef="TMIngreso" >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> H.Ingreso </th>
+                  <td mat-cell *matCellDef="let element" class="cel">
+                    <mat-form-field style="width: 65px !important; margin-right: 10px;">
+                      <input matInput type="text" [value] = "element.TM_Ingreso" style="text-align: center" (blur)="onActualizarCampoAsistencia(element.Id, 'TM_Ingreso', $event.target.value)" color="primary" 
+                      [id] = "'minicio'+element.Id" [disabled]="!toCheck(element.T_Manana)" >
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- hora de salida mañana -->
+                <ng-container matColumnDef="TMSalida" style="width: 80px !important; margin-right: 10px;">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> H.Salida </th>
+                  <td mat-cell *matCellDef="let element" class="cel">
+                    
+                    <mat-form-field style="width: 65px !important; margin-right: 10px;">
+                      <input matInput type="text" [value] = "element.TM_Salida" style="text-align: center" (blur)="onActualizarCampoAsistencia(element.Id, 'TM_Salida', $event.target.value)" color="primary" 
+                      [id] = "'msalida'+element.Id" [disabled]="!toCheck(element.T_Manana)" >
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- hora extra de mañana -->
+                <ng-container matColumnDef="TMHextra" style="width: 80px !important; margin-right: 10px;">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> H.Extra </th>
+                  <td mat-cell *matCellDef="let element" class="cel">
+                    
+                    <mat-form-field style="width: 65px !important; margin-right: 10px;">
+                      <input matInput type="text" [value] = "element.TM_Salida" style="text-align: center" (blur)="onActualizarCampoAsistencia(element.Id, 'TM_Extra', $event.target.value)" color="primary" 
+                      [id] = "'mextra'+element.Id" [disabled]="!toCheck(element.T_Manana)" >
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+
+                <!-- Ingresó en la tarde? -->
+                <ng-container matColumnDef="TT">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header style='width: 25px; padding-left: 5px;'> PM? </th>
+                  <td mat-cell *matCellDef="let element"> 
+                    <mat-checkbox [checked]="toCheck(element.T_Tarde)" (change)="onActualizarCampoAsistencia(element.Id, 'T_Tarde', $event.checked);desactivarText(element.Id, 't',$event.checked); " color="primary" > 
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="TTIngreso">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> H.Ingreso </th>
+                  <td mat-cell *matCellDef="let element" class="cel">
+                    
+                    <mat-form-field style="width: 65px !important; margin-right: 10px;">
+                      <input matInput type="text" [value] = "element.TT_Ingreso" style="text-align: center" (blur)="onActualizarCampoAsistencia(element.Id, 'TT_Ingreso', $event.target.value)" color="primary" 
+                      [id] = "'tinicio'+element.Id" [disabled]="!toCheck(element.T_Tarde)" >
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="TTSalida"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> H.Salida </th>
+                  <td mat-cell *matCellDef="let element" class="cel">
+                    
+                    <mat-form-field style="width: 65px !important; margin-right: 10px;">
+                      <input matInput type="text" [value] = "element.TT_Salida" style="text-align: center" (blur)="onActualizarCampoAsistencia(element.Id, 'TT_Salida', $event.target.value)" color="primary" 
+                      [id] = "'tsalida'+element.Id" [disabled]="!toCheck(element.T_Tarde)" >
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="TTHextra"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> H.Extra </th>
+                  <td mat-cell *matCellDef="let element" class="cel">
+                    
+                    <mat-form-field style="width: 65px !important; margin-right: 10px;">
+                      <input matInput type="text" [value] = "element.TT_Extra" style="text-align: center" (blur)="onActualizarCampoAsistencia(element.Id, 'TT_Extra', $event.target.value)" color="primary" 
+                      [id] = "'textra'+element.Id" [disabled]="!toCheck(element.T_Tarde)" >
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="ColumnasAsistencia"></tr>
+                <tr mat-row *matRowDef="let row; columns: ColumnasAsistencia;"></tr>
+
+              </table>
+            </mat-card-content>
+          </mat-card>  
+        </mat-tab>
+
+        <!-- SEGUIMIENTO -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 10px;" class="example-tab-icon">leaderboard</mat-icon>
+            Seguimiento
+          </ng-template>
+
+          <mat-card>
+            <mat-card-content>
+              <form [formGroup]="CargaSeguimientoForm" (ngSubmit)="cargarSeguimiento()">
+                <!-- mmes -->
+                <mat-form-field style="width: 130px; margin-right: 20px;">
+                  <mat-icon matPrefix style="margin-right: 10px">calendar_month</mat-icon>
+                  <!-- <mat-label>Mes de Evaluación</mat-label> -->
+                  <mat-select formControlName="Mes" placeholder="Mes">
+                    <mat-option [value]="01" >Enero</mat-option>
+                    <mat-option [value]="02" >Febrero</mat-option>
+                    <mat-option [value]="03" >Marzo</mat-option>
+                    <mat-option [value]="04" >Abril</mat-option>
+                    <mat-option [value]="05" >Mayo</mat-option>
+                    <mat-option [value]="06" >Junio</mat-option>
+                    <mat-option [value]="07" >Julio</mat-option>
+                    <mat-option [value]="08" >Agosto</mat-option>
+                    <mat-option [value]="09" >Septiembre</mat-option>
+                    <mat-option [value]="10" >Octubre</mat-option>
+                    <mat-option [value]="11" >Noviembre</mat-option>
+                    <mat-option [value]="12" >Diciembre</mat-option>
+                  </mat-select>
+                </mat-form-field>
+        
+                <mat-form-field style="width: 100px;">
+                  <mat-icon matPrefix style="margin-right: 10px">calendar_month</mat-icon>
+                  <!-- <mat-label>Año de Evaluación</mat-label> -->
+                  <mat-select formControlName="Ano" placeholder="Año">
+                    <mat-option [value]="2023" >2023</mat-option>
+                    <mat-option [value]="2024" >2024</mat-option>
+                    <mat-option [value]="2025" >2025</mat-option>
+                    <mat-option [value]="2026" >2026</mat-option>
+                    <mat-option [value]="2027" >2027</mat-option>
+                    <mat-option [value]="2028" >2028</mat-option>
+                    <mat-option [value]="2029" >2029</mat-option>
+                    <mat-option [value]="2030" >2030</mat-option>
+             
+                  </mat-select>
+                </mat-form-field>
+        
+                <button mat-icon-button type="submit">
+                  <mat-icon>search</mat-icon>
+                </button>
+
+                <mat-form-field class="TotalPlanilla">
+                  <mat-label>Total Planilla</mat-label>
+                  <input matInput type="text" [value]="PlanillaMes">
+
+                </mat-form-field>
+
+              </form>
+
+              <table class="tablaseg" mat-table [dataSource] = "dataSeguimientos" style="width: 100%;" matSort>
+                <!-- ColumnasSeguimiento: string[] = ["Usuario", "Basico", "Otros", "Descuentos", "Adelantos", "Total"]; -->
+                
+                <!-- Usuario -->
+                <ng-container matColumnDef="Usuario"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> Usuario </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.Usuario}}</td>
+                  <!-- <td mat-footer-cell *matFooterCellDef> Total </td> -->
+                </ng-container>
+
+                <!-- Basico -->
+                <ng-container matColumnDef="Basico">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header class="header-align-right"> S.Básico </th>
+                  <td style="text-align:right; color:green" mat-cell *matCellDef="let element" class="cel">{{element.Basico}}</td>
+                </ng-container>
+
+                <!-- Otros -->
+                <ng-container matColumnDef="Otros"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header class="header-align-right"> Otros </th>
+                  <td  style="text-align:right; color:green" mat-cell *matCellDef="let element" class="cel">{{element.Otros}}</td>
+                </ng-container>
+
+                <!-- Descuentos -->
+                <ng-container matColumnDef="Descuentos"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header class="header-align-right"> Descuentos </th>
+                  <td style="text-align:right; color:red" mat-cell *matCellDef="let element" class="cel">
+                    {{element.Descuentos}}
+                    <!-- <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="infoPlanilla(element.Id, 'd')">
+                      <mat-icon>close</mat-icon>
+                    </button> -->
+                  </td>
+                </ng-container>
+
+                <!-- Adelantos -->
+                <ng-container matColumnDef="Adelantos"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header class="header-align-right"> Adelantos </th>
+                  <td style="text-align:right ; color:red" mat-cell *matCellDef="let element" class="cel">{{element.Adelantos}}</td>
+                </ng-container>
+
+                <!-- Total -->
+                <ng-container matColumnDef="Total"  >
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header class="header-align-right"> Total </th>
+                  <td style="text-align:right ; font-weight: bold;" mat-cell *matCellDef="let element" class="cel">{{element.Total}}</td>
+                  <!-- <td mat-footer-cell *matFooterCellDef> total</td> -->
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="ColumnasSeguimiento"></tr>
+                <tr mat-row *matRowDef="let row; columns: ColumnasSeguimiento;"></tr>
+                <!-- <tr mat-footer-row *matFooterRowDef="ColumnasSeguimiento"></tr> -->
+              </table>
+            </mat-card-content>
+          </mat-card>
+
+
+        </mat-tab>
+
+        <!-- COLABORADORES -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon style="margin-right: 10px;" class="example-tab-icon">badge</mat-icon>
+            Colaboradores
+          </ng-template>
+          
+          <mat-card [class.oculto]="dataSource==null">  
+            <mat-card-content >
+              <table mat-table [dataSource]="dataSource" style="width:100%" matSort>
+                <!-- displayedColumns: string[] = ['Usuario', 'Tipo','Nombre', 'FechaNac', 'Telefono', 'Direccion', 'FechaInicio']; -->
+                
+                <ng-container matColumnDef="Usuario">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> Usuario </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.Usuario}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Tipo">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> Cargo </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{Tipo2Cargo(element.Tipo)}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Nombre">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.Nombre}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="FechaNac">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header>Fecha Nacimiento </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.FechaNac}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Telefono">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header>Telefono </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.Telefono}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Direccion">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header>Direccion </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.Direccion}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="FechaInicio">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header>Fecha Inicio </th>
+                  <td mat-cell *matCellDef="let element" class="cel">{{element.FechaInicio}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Pos">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
+                  <td mat-cell *matCellDef="let element" class="cel" > 
+                    <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" (click)="onModalUsuario(element, 'Edit')">
+                      <mat-icon>mode_edit_outline</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Del">
+                  <th mat-header-cell *matHeaderCellDef style="text-align: center;" mat-sort-header>  </th>
+                  <td mat-cell *matCellDef="let element" class="cel" > 
+                    <button mat-icon-button (click)="onDelUsuario(element)">
+                      <mat-icon class="mat-18">clear</mat-icon>
+                  </button>
+                  </td>
+                </ng-container>
+               
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </mat-card-content>
+            <mat-card-footer>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="50" showFirstLastButtons></mat-paginator>
+            </mat-card-footer>
+          </mat-card>
+
+        </mat-tab>
+        
+      </mat-tab-group>
+
+    </mat-card-content>
+  </mat-card>
+
+
+</div>

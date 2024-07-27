@@ -1,0 +1,199 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Clientes</span>
+  <button mat-icon-button><mat-icon routerLink="/new_cliente" >person_add</mat-icon></button>
+  
+  
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="CargaForm" (ngSubmit)="CargarClientes()">
+
+
+        
+        <!-- mmes -->
+        <mat-form-field style="width: 130px; margin-right: 20px;">
+          <mat-icon matPrefix style="margin-right: 10px">calendar_month</mat-icon>
+          <!-- <mat-label>Mes de Evaluación</mat-label> -->
+          <mat-select formControlName="Mes" placeholder="Mes">
+            <mat-option [value]="01" >Enero</mat-option>
+            <mat-option [value]="02" >Febrero</mat-option>
+            <mat-option [value]="03" >Marzo</mat-option>
+            <mat-option [value]="04" >Abril</mat-option>
+            <mat-option [value]="05" >Mayo</mat-option>
+            <mat-option [value]="06" >Junio</mat-option>
+            <mat-option [value]="07" >Julio</mat-option>
+            <mat-option [value]="08" >Agosto</mat-option>
+            <mat-option [value]="09" >Septiembre</mat-option>
+            <mat-option [value]="10" >Octubre</mat-option>
+            <mat-option [value]="11" >Noviembre</mat-option>
+            <mat-option [value]="12" >Diciembre</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 100px;">
+          <mat-icon matPrefix style="margin-right: 10px">calendar_month</mat-icon>
+          <!-- <mat-label>Año de Evaluación</mat-label> -->
+          <mat-select formControlName="Ano" placeholder="Año">
+            <mat-option [value]="2023" >2023</mat-option>
+            <mat-option [value]="2024" >2024</mat-option>
+            <mat-option [value]="2025" >2025</mat-option>
+            <mat-option [value]="2026" >2026</mat-option>
+            <mat-option [value]="2027" >2027</mat-option>
+            <mat-option [value]="2028" >2028</mat-option>
+            <mat-option [value]="2029" >2029</mat-option>
+            <mat-option [value]="2030" >2030</mat-option>
+     
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button type="submit">
+          <mat-icon>search</mat-icon>
+        </button>
+
+       
+ 
+      
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="dataSource" style="text-align: center;">
+    <mat-card-content>
+      <mat-form-field  style="width: 100%; ">
+        <mat-label>Buscar </mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juan Perez">
+      </mat-form-field>
+      <p>En esta opción usted verá clasificado a los clientes por la cantidad de compras realizadas en el mes</p>
+
+      <span class="mobile"> Filtrar por: </span>  
+      <mat-button-toggle-group #group="matButtonToggleGroup">
+        
+        <mat-button-toggle value="left" aria-label="Text align left" (click)="filtrar('malo')">
+          <mat-icon  style = " color: red;">arrow_downward</mat-icon> 
+          <span class="no_mobile">0 compras ({{((malos / total)*100).toFixed(2) }}%)</span> 
+          <span class="mobile"> {{((malos / total)*100).toFixed(2) }}% </span> 
+        </mat-button-toggle>
+        <mat-button-toggle value="center" aria-label="Text align center" (click)="filtrar('medio')">
+          <mat-icon  style = " color: orange;">trending_flat</mat-icon> 
+          <span class="no_mobile">1-2 compras ({{((medios / total)*100).toFixed(2) }}%)</span> 
+          <span class="mobile"> {{((medios / total)*100).toFixed(2) }}% </span> 
+        </mat-button-toggle>
+        <mat-button-toggle value="right" aria-label="Text align right" (click)="filtrar('bueno')">
+          <mat-icon  style = " color: green;">arrow_upward</mat-icon> 
+          <span class="no_mobile">> 2 compras ({{((buenos / total)*100).toFixed(2) }}%)</span> 
+          <span class="mobile"> {{((buenos / total)*100).toFixed(2) }}% </span> 
+        </mat-button-toggle>
+        <mat-button-toggle value="right" aria-label="Text align right" (click)="filtrar('todos')">
+          <mat-icon  style = " color: #004998;">group_work</mat-icon> 
+          <span class="no_mobile">Ver Todos</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <!-- <div style="width: 80%; margin:auto ">
+        <div [ngStyle]="{' height:10px;'}" ></div>
+      </div> -->
+      <div style="width: 95%; margin:auto">
+        <div style="display: inline-block; background-color:red; height:10px" [style.width.%]="((malos / total)*100)"> </div>
+        <div style="display: inline-block; background-color:orange; height:10px" [style.width.%]="((medios / total)*100)"> </div>
+        <div style="display: inline-block; background-color:green; height:10px" [style.width.%]="((buenos / total)*100)"> </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+  
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let cliente of dataSource.filteredData; let i = index" [ngClass]="{'malo': cliente.Pedidos == 0, 'medio' : cliente.Pedidos  > 0 && cliente.Pedidos <3, 'bueno' : cliente.Pedidos >= 3  }" (opened)="CargarDetalle(cliente)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon style = "margin-right: 10px; color: red;" *ngIf="MostrarIcono(cliente.Pedidos,'r')" > arrow_downward </mat-icon>
+          <mat-icon style = "margin-right: 10px; color: orange;" *ngIf="MostrarIcono(cliente.Pedidos,'a')"> trending_flat </mat-icon>
+          <mat-icon style = "margin-right: 10px; color: green;" *ngIf="MostrarIcono(cliente.Pedidos,'v')"> arrow_upward </mat-icon>
+
+         
+          
+          {{i + 1}}. {{cliente.Nombre}} - [ {{cliente.Pedidos}} Pedido(s)]          
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-form-field  style="width: 100%; ">
+        <mat-icon matPrefix style="margin-right: 10px">home</mat-icon>
+        <input matInput placeholder="Dirección" value="{{cliente.Direccion}}" readonly>
+      </mat-form-field>
+      
+      <mat-form-field  style="width: 100%; ">
+        <mat-icon matPrefix style="margin-right: 10px">map</mat-icon>
+        <input matInput placeholder="Referencia" value="{{cliente.Referencia}}" readonly>
+      </mat-form-field>
+
+      <mat-form-field  style="width: 100%; ">
+        <mat-icon matPrefix style="margin-right: 10px">call</mat-icon>
+        
+        <input matInput placeholder="Telefono" value="{{cliente.Telefono}}" readonly>
+        <a mat-button color="primary" matSuffix [href]="'tel:' + cliente.Telefono " >Llamar</a>
+       
+      </mat-form-field>
+      
+      <!-- <a [href]="'tel:'cliente.Telefono">cliente.Telefono</a> -->
+
+      <!-- <p >{{cliente.Direccion}} - {{cliente.Referencia}} | {{cliente.Telefono}} </p> -->
+     
+
+        <img *ngIf="cliente.Pedidos>0"  src="../../../../assets/cargando_ch.gif"  [attr.id]="'l' + cliente.Id" style="height: 30px">
+        <h3 *ngIf="cliente.Pedidos==0" >ultimo pedido: 
+          <b *ngIf="cliente.ult_pedido!=''">{{cliente.ult_pedido}} </b>
+          <b *ngIf="cliente.ult_pedido==null">NUNCA HIZO PEDIDO </b>
+        </h3>
+        <p *ngIf="cliente.Pedidos==0" >Cliente sin pedidos registrados en el periodo evaluado </p>
+        
+        <table mat-table [dataSource]="DetalleCliente" style="width:100%" matSort *ngIf="cliente.Pedidos>0" > 
+          <!-- ['Fecha', 'Bot','Paq', 'S/']; -->
+          <!-- N° -->
+          <!-- <ng-container matColumnDef="N">
+            <th mat-header-cell  *matHeaderCellDef  mat-sort-header>Fecha</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+          </ng-container> -->
+          
+          <ng-container matColumnDef="Fecha">
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Fecha  </th>
+            <td mat-cell *matCellDef="let element" style="padding-left:10px; padding-right:10px">
+              <span class="SubTituloCh" style="text-align: center;">{{gQuery.parte_fecha(element.Fecha, 'm') }} </span>
+              <span class="SubTituloGr" style="font-size:20.3pt; text-align: center;">{{element.Fecha.split("/")[0] }} </span>          
+              </td>
+          </ng-container>
+          
+
+           <!-- Cantidad Bot -->
+           <ng-container matColumnDef="Bot">
+            <th mat-header-cell  *matHeaderCellDef  mat-sort-header>N° Bot</th>
+            <td mat-cell *matCellDef="let element">{{element.Cantidad}}</td>
+          </ng-container>
+
+          <!-- Paquetes -->
+          <ng-container matColumnDef="Paq">
+            <th mat-header-cell  *matHeaderCellDef  mat-sort-header>N° Paq</th>
+            <td mat-cell *matCellDef="let element">{{element.CantidadPaq}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Soles">
+            <th mat-header-cell  *matHeaderCellDef  mat-sort-header>S/ </th>
+            <td mat-cell *matCellDef="let element">
+              {{(element.Cantidad * element.Precio) +(element.CantidadPaq * element.PrecioPaq) }}
+            </td>
+          </ng-container>
+  
+          
+  
+          <tr mat-header-row *matHeaderRowDef="ColumnasDetalleCliente; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: ColumnasDetalleCliente;" ></tr>
+  
+        </table>
+        
+    
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card-content>
+</mat-card>
+
+</div>

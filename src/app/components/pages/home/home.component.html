@@ -1,0 +1,73 @@
+<mat-toolbar>
+    <span style="flex: 1 1 auto; text-align: center;">AQUAM</span>
+</mat-toolbar>
+
+<div class="container">
+
+  <mat-card class="card">
+    <mat-card-header>
+      <div mat-card-avatar style="
+      background-size: cover;">
+      <img src="../../../../assets/users.png" alt="" style="height: 40px;">  
+      </div>
+      <mat-card-title>{{userData.Usuario}} </mat-card-title>
+      <mat-card-subtitle>{{userData.Tipo}} </mat-card-subtitle>
+      <div style="text-align: center; position:absolute; right: 30px;">
+        <img src="../../../../assets/logo.png" alt="" style="height: 50px;">
+      </div>
+
+    </mat-card-header>
+    <mat-card-content>
+      <div style='text-align: center;' >
+        <ng-container *ngFor="let op of Menu">
+          <div *ngIf="op.TipoMenu !== 'Submenu'" class='tareas' [routerLink]= "op.Link">
+            <button mat-icon-button>
+              <mat-icon>{{ op.Icono }}</mat-icon>
+            </button>
+            <div class="item">{{ op.Item }}</div>
+          </div>
+        </ng-container>
+        
+
+  
+        <!-- <div class='tareas'>
+          <mat-icon class="iconos">battery_full</mat-icon>
+          Producción
+        </div>
+
+        <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">phone_callback</mat-icon>
+          Registrar Pedidos
+        </div>
+        
+        <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">local_shipping</mat-icon>
+          Salir a entregar</div>
+        
+          <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">store</mat-icon>
+          Entregado en tienda</div>
+        
+          <div class='flecha'></div>
+        <div class='tareas'>
+          <mat-icon class="iconos">dns</mat-icon>
+          Rendir cuenta</div> -->
+        
+        <!-- <button style='width: 120px; max-width: 30%; margin:2.5px' mat-stroked-button *ngFor='let op of Opciones' (click)="onIr(op.Link)">
+          <mat-icon>{{op.Icon}}</mat-icon>
+          <br>
+          <span>{{op.Title}} </span>
+        </button> -->
+      </div>
+    </mat-card-content>
+    <mat-card-actions style="text-align: center;">
+      <!-- <button mat-button routerLink="/profile">Perfil</button> -->
+      <button mat-button (click)="onLogout()" >Cerrar Sesión</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+

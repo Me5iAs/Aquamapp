@@ -1,0 +1,143 @@
+mat-toolbar{
+  background: #004998 !important ;
+  background: -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  background: linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  color: #fff;
+
+}
+  
+.container{
+  
+  margin: 0 auto;
+  padding: 10px ;
+  justify-content: center;
+
+}
+
+
+table{
+  width: 100%;
+  border-collapse: collapse; 
+}  
+
+
+table tr:first{
+  text-align: center !important;
+}
+
+
+table th {
+  /* padding: 10px 10px 10px 10px im !important; */
+  background: #004998;
+  color: #fff;
+  text-align: center !important;
+}
+
+table tr {
+  height: 50px;
+  /* padding: 5px !important; */
+  /* border-bottom: 1px solid rgba(0,0,0,0.4); */
+}
+
+td{
+  padding: 5px !important;
+  border: 1px solid #000;
+}
+
+
+tr:nth-child(even) td { background: #F1F1F1; } 
+
+tr:nth-child(odd) td { background: #FEFEFE; }
+
+
+/* tr:hover { background: #666; } */
+
+/* 
+table{
+  width: 100%;
+}
+
+
+th{
+  text-align: center;
+} */
+
+.left{
+  text-align: left;;
+}
+
+.right{
+  text-align: right;
+}
+  
+.cel:hover{
+  background: #F2F3F5;
+  cursor: pointer;
+}
+
+.oculto{
+  display: none;
+}
+  
+
+/* .subcelda{
+  display: block;
+  font-size: 12px;
+  color: rgba(96,93,92,.87);
+  font-weight: 500;
+  font-family:Roboto, "Helvetica Neue", sans-serif;;
+} */
+
+/* 
+.cliente_celda{
+  display:block; 
+  color:rgb(31,26,23); 
+  font-weight: 400;
+  text-shadow: 0px 0px 2px #c3c3c3;
+
+} */
+/*   
+.verde{
+  color: green;
+}
+  
+  
+.rojo{
+  color: chocolate; 
+}
+  
+
+.col_fecha{
+  max-width: 45px;
+  text-align: center;
+
+} */
+  
+/* .SubTituloCh{
+  display: block;
+  color: #A4A4A4;
+  text-decoration: none;
+  font-family: 'Roboto',Arial;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0px 
+} */
+
+/* 
+.SubTituloGr{
+  display: block;
+  color: #696969;
+  text-decoration: none;
+  font-family: 'Roboto',Arial;
+  font-style: normal;
+  font-weight: 400;
+} */
+
+/* 
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type,
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type{
+  padding: 0px !important
+}
+   */

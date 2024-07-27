@@ -1,0 +1,38 @@
+<mat-toolbar>
+  <a mat-icon-button href="javascript:history.back(1)"><mat-icon>arrow_back</mat-icon></a>
+
+  <span style="flex: 1 1 auto; text-align: center;">Mapa de Pedidos</span>
+  <button mat-icon-button>
+  
+</button>
+</mat-toolbar>
+<div class="container">
+  <mat-card>
+    <mat-card-content >
+      <agm-map
+        [zoom]="16"
+        [latitude]="latitud" 
+        [usePanning]="true"
+        [longitude] ="longitud"
+        
+      >
+        <agm-marker
+          *ngFor='let punto of markers;  let i = index'
+          [latitude]="punto.latitud"
+          [longitude]="punto.longitud"
+          [label]='punto.label'
+          (markerClick)="verInfo(i)"
+        >
+      </agm-marker>
+      
+      </agm-map>
+
+    </mat-card-content>
+    <mat-card-footer>
+        <!-- <button mat-raised-button [disabled]="!ClienteForm.valid" (click)="onRegistrarCliente(ClienteForm.value)">Registrar</button> -->
+        <!-- <button mat-raised-button routerLink="/clientes">Cancelar</button> -->
+    </mat-card-footer>
+</mat-card>
+
+
+</div>

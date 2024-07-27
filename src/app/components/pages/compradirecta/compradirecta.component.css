@@ -1,0 +1,111 @@
+mat-toolbar{
+  background: #004998 !important;
+  background: -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important;
+  background: -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  background: linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important;
+  color: #fff;
+  position: absolute;
+  z-index: 1000;
+}
+
+.container{
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  justify-content: center;
+  margin-top:56px;
+}
+  
+.mat-icon{
+  margin-right: 5px !important;
+}  
+/* 
+
+.container
+  max-width: 80%
+  @media screen and (max-width:667px)
+    max-width: 100%
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  margin 0 auto
+  margin-top: 25px;
+  margin-bottom: 25px
+  display: grid;
+  grid-template-columns: repeat(1,98%);
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+  justify-content: center;
+  .delivery-card
+    &:hover
+      opacity: 0.8;
+    border-radius: 5px;
+    padding: 20px;
+    @media screen and (max-width:667px)
+      padding: 2px;
+    font-size: 150%; */
+
+
+/* .mat-card
+  @media screen and (max-width:667px)
+    // padding 1px
+
+.mat-card-content
+  img
+    width 100%
+    margin 0 auto
+
+table {
+  width: 100%;
+} */
+/* 
+mat-icon
+  margin-left:8px */
+/* 
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+} */
+
+/* .celda
+  padding-right: 2px !important 
+  min-width: 120px
+  @media screen and (max-width:667px)
+    padding: 0px !important 
+
+.no_mobile
+  
+  @media screen and (max-width:667px)
+    display none */
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px;
+  cursor: pointer;
+  margin: auto;
+  display: block;
+  width: 240px;
+  line-height: 25px;
+  margin-bottom: 10px;
+}
+
+input[type="file"] {
+  display: none;
+}
+mat-form-field{
+  width: 100%;
+}
+.map-container{
+  border-radius: 5px;
+  box-shadow: 0px 0px 8px 5px rgba(45,45,45,.2);
+}
+
+.iconAccion{
+  margin: 0px !important;
+}
+  
+
+mat-card-footer{
+  text-align: center
+}
+

@@ -1,0 +1,91 @@
+<!-- "Info"|"Editar"|"Eliminar"|"Nuevo" -->
+
+<button mat-icon-button style='float:right' (click)="onCancel()" [mat-dialog-close]="false">
+  <mat-icon>close</mat-icon>
+</button>
+
+<h1 style="text-align: center;" mat-dialog-title *ngIf="dataMov.Accion=='Info'">Información del Movimiento</h1>
+<h1 style="text-align: center;" mat-dialog-title *ngIf="dataMov.Accion=='Nuevo'">Nuevo Movimiento</h1>
+<div mat-dialog-content>
+  
+    <form [formGroup]="MovimientoForm" style="text-align: center;">
+      
+      <!-- fecha -->
+       <!-- si el que accede no es rot entonces la fecha no es modificable  -->
+      <div *ngIf="!EsRoot">{{hoy}}</div>
+
+      <!-- si el que accede sí e srot, entonces se muestra el control de fecha -->
+      <mat-form-field *ngIf="EsRoot"> 
+        <mat-label>Fecha</mat-label>
+        <input readonly="true" matInput [matDatepicker]="picker" formControlName="Fecha">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- tipo -->
+       
+      <!-- <mat-form-field *ngIf="dataMov.Accion=='Info'">
+          <input [readonly]="true" type="text" matInput placeholder="Tipo" formControlName="Tipo" >
+        </mat-form-field>
+
+      <mat-form-field *ngIf="dataMov.Accion=='Info'">
+        <input [readonly]="true" type="text" matInput placeholder="Categoria" formControlName="Categoria" >
+      </mat-form-field> -->
+
+      <ng-container *ngIf="dataMov.Accion=='Info'">
+        <mat-form-field><input [readonly]="true" type="text" matInput placeholder="Tipo" formControlName="Tipo"></mat-form-field>
+        <mat-form-field><input [readonly]="true" type="text" matInput placeholder="Categoria" formControlName="Categoria"></mat-form-field>
+      </ng-container>
+      
+
+      <mat-form-field *ngIf="dataMov.Accion=='Nuevo'">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="IdCat" >
+          <mat-option>-- None --</mat-option>
+          <mat-optgroup *ngFor="let group of dataMov.Categorias" [label]="group.Nombre">
+            <mat-option *ngFor="let tipo of group.Categoria" [value]="tipo.Id">
+              {{tipo.Categoria}}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+      
+
+      <mat-form-field *ngIf="MovimientoForm.value.IdCat == '5'">
+        <mat-label>Usuario</mat-label>
+        <mat-select formControlName="IdRef"  >
+          <mat-option *ngFor="let usu of Usuarios" [value]="usu.Id">
+            {{usu.Usuario}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <ng-container *ngIf="dataMov.Accion=='Nuevo'">
+        <mat-form-field><input type="text" matInput placeholder="Glosa" formControlName="Glosa"></mat-form-field>
+        <mat-form-field><input type="text" matInput placeholder="Monto" formControlName="Monto"></mat-form-field>
+        <mat-checkbox formControlName="CajaGeneral" style="display: block;">Caja General</mat-checkbox>
+      </ng-container>
+      
+      <ng-container *ngIf="dataMov.Accion=='Info'">
+        <mat-form-field><input [readonly]="dataMov.IdRef !== '0'" type="text" matInput placeholder="Glosa" formControlName="Glosa"></mat-form-field>
+        <mat-form-field><input [readonly]="dataMov.IdRef !== '0'" type="text" matInput placeholder="Monto" formControlName="Monto"></mat-form-field>
+        <mat-checkbox style="display: block;" formControlName="CajaGeneral" disabled>Caja General</mat-checkbox>
+      </ng-container>
+
+      
+      <!-- <mat-form-field *ngIf="dataMov.Accion=='Nuevo'"><input type="text" matInput placeholder="Glosa" formControlName="Glosa" ></mat-form-field>
+      <mat-form-field *ngIf="dataMov.Accion=='Nuevo'"><input type="text" matInput placeholder="Monto" formControlName="Monto" ></mat-form-field>
+
+      <mat-form-field *ngIf="dataMov.Accion=='Info'"><input  [readonly]="dataMov.IdRef!='0'" type="text" matInput placeholder="Glosa" formControlName="Glosa" ></mat-form-field>
+      <mat-form-field *ngIf="dataMov.Accion=='Info'"><input  [readonly]="dataMov.IdRef!='0'" type="text" matInput placeholder="Monto" formControlName="Monto" ></mat-form-field> -->
+  </form>
+</div>
+<div mat-dialog-actions style="text-align:center; align-items: center; display: block !important;">
+  <!-- <button mat-raised-button (click)="onCancel()" [mat-dialog-close]="false" color="warn">Cancelar</button> -->
+  <button mat-raised-button *ngIf="dataMov.Accion=='Info'" (click)="onUpdateMov(MovimientoForm.value)" [mat-dialog-close]="true"  style="background:#004998; color: #fff">Actualizar</button>
+  <button mat-raised-button *ngIf="dataMov.Accion=='Info'" (click)="onDelMov(MovimientoForm.value)" [mat-dialog-close]="true"  color="warn" >Borrar</button>
+  <button mat-raised-button *ngIf="dataMov.Accion=='Info'" (click)="onCredMov(MovimientoForm.value)" [mat-dialog-close]="true"  color="accent" >Pasar a Crédito</button>
+
+  <button mat-raised-button *ngIf="dataMov.Accion=='Nuevo'" (click)="onNewMov(MovimientoForm.value)" [mat-dialog-close]="true" [disabled]="!MovimientoForm.valid" style="background:#004998; color:#fff">Reg. Movimiento</button>
+</div>
+

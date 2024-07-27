@@ -1,0 +1,133 @@
+mat-toolbar
+  background #004998 !important 
+  background -moz-linear-gradient(45deg,  #004998 0%, #0084b5 50%, #5dbdd3 100%) !important
+  background -webkit-linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important
+  background linear-gradient(45deg,  #004998 0%,#0084b5 50%,#5dbdd3 100%) !important
+  color #fff
+
+.container
+  max-width: 800px
+  margin 0 auto
+  padding: 10px 
+  justify-content: center;
+
+.cel:hover{
+  background: #F2F3F5;
+  cursor pointer
+}
+
+.oculto
+  display: none;
+
+.subcelda
+  display: block
+  font-size: 12px
+  color: rgba(96,93,92,.87)
+  font-weight: 500
+  font-family:Roboto, "Helvetica Neue", sans-serif;
+
+.cliente_celda
+  display:block; 
+  color:rgb(31,26,23); 
+  font-weight: 400;
+  text-shadow: 0px 0px 2px #c3c3c3;
+
+.Estado
+  width 25px
+  text-align center
+  height 25px
+  line-height 25px
+  border-radius 25px 25px 25px 25px
+  padding 3px 10px
+  font-weight 500
+
+.Normal
+  background-color green
+  color white
+
+.Dudoso
+  background-color gold  
+
+.Riesgo
+  background-color red
+  color white
+
+.Perdida
+  background-color black
+  color white
+
+.Segmento
+  width 25px
+  text-align center
+  height 25px
+  line-height 25px
+  border-radius 50%
+  font-weight 500
+
+.bSegmento
+  width 25px
+  text-align center
+  height 25px
+  display inline-block
+  line-height 25px
+  border-radius 15px 15px 15px 15px
+  font-weight 500
+
+.SegA
+  background #004998
+  color white
+
+.SegB
+  background green
+  color white
+
+.SegC
+  background gold
+  color black
+
+.SegD
+  background #A02200
+  color white
+
+.SegE
+  background black
+  color white
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.filter-group-seg
+  display flex
+  flex-wrap wrap
+  margin-bottom 10px
+
+.filtroRiesgo
+  display: none
+
+.porcentajeRiesgo
+  line-height normal
+  margin-top 0
+  font-size: 1
+  color: black
+  padding-left: 4px
+  display: inline-block !important
+
+
+@media only screen and (min-width: 768px)
+  .filtroRiesgo
+    display: inline
+  
+  .PorcentajeRiesgo
+    line-height normal
+    margin-top -15px
+    font-size: 0.8em
+    color: rgba(96,93,92,0.87)
+    padding-left: 20px
+    display: block
+    

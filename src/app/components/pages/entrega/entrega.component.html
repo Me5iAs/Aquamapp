@@ -1,0 +1,97 @@
+<mat-toolbar>
+
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Entregar en Tienda</span>
+  <!-- <button mat-icon-button><mat-icon routerLink="/nuevo_pedido" *ngIf="this.userData.CodTipo!='3'" >add</mat-icon></button> -->
+  
+  
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card [class.oculto]="dataSource==null">
+    <mat-card-content >
+      <mat-form-field style="width: calc(100% - 150px)">
+        <mat-label>Buscar clientes</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juan Perez">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <a mat-raised-button matSuffix href='/#/ver_pedidos_map/3' style="margin-left:10px">
+        <mat-icon>pin_drop</mat-icon>
+      </a>
+      
+      <button mat-raised-button matSuffix (click)="CargarPedidos()" style="margin-left:10px">
+        <mat-icon>refresh</mat-icon>
+      </button>
+
+      <table mat-table [dataSource]="dataSource" style="width:100%" matSort>
+              
+        
+        <ng-container matColumnDef="Nro">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header style='width: 25px; padding-left: 5px;'> Nro </th>
+          <td mat-cell *matCellDef="let element"> 
+            <span> {{element.Nro}}</span> 
+          </td>          
+        </ng-container>
+
+        <ng-container matColumnDef="Cliente">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Cliente </th>
+          <td mat-cell *matCellDef="let element"  style="cursor:pointer" (click)="onAtenderPedido(element.Id)"> 
+            <span class="cliente_celda" *ngIf='element.Cliente!="Anónimo"'> {{element.Cliente}}</span>
+            <span class="cliente_celda" *ngIf='element.Cliente=="Anónimo"'> {{element.Cliente}}:{{element.Comentario}}</span>
+
+            <span class="subcelda" > [{{element.FechaPide}}] (<b style='color:black'>{{element.Cantidad}}</b> Bot + <b style='color:black'>{{element.CantidadPaq}}</b> Paq)</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Borrar">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header style="width: 50px;"> borrar </th>
+          <td mat-cell *matCellDef="let element"> 
+            <button mat-icon-button (click)="onDelPedido(element.Id)">
+              <mat-icon>highlight_off</mat-icon>
+            </button>
+            
+          </td>
+        </ng-container>
+       
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table> 
+    </mat-card-content>
+
+    <mat-card-footer>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="50" showFirstLastButtons></mat-paginator>
+      
+      
+      
+
+    </mat-card-footer>
+
+  </mat-card>
+
+  <mat-card *ngIf="dataSource==null">
+    <mat-card-header>
+      <mat-card-title>No se encuentran Pedidos por entregar</mat-card-title>
+      <mat-card-subtitle>Actualmente el sistema no tiene registrada ninguna entrega pendiente.</mat-card-subtitle>
+    </mat-card-header>
+ <mat-card-content style="text-align: center;">
+        <button mat-raised-button matSuffix (click)="CargarPedidos()" style="margin-left:10px">
+        Actualizar <br>
+          <mat-icon>refresh</mat-icon>
+      </button>
+  </mat-card-content>
+
+    <!--  <mat-card-actions>
+      <button mat-button routerLink="/new_cliente">
+        <mat-icon >person_add</mat-icon>
+        Nuevo Cliente
+      </button>
+   
+      <button mat-button routerLink="/">
+        <mat-icon >home</mat-icon>
+        Ir al inicio
+      </button>
+    </mat-card-actions> -->
+  </mat-card>
+
+
+</div>

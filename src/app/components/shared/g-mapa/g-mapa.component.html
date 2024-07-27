@@ -1,0 +1,25 @@
+<agm-map
+  style="height:500px; width: 100%;"
+  [zoom]="zoom"
+  [latitude]="lat" 
+  [longitude] ="lng"
+  (mapClick)="click($event)"
+>
+  <agm-marker
+    *ngFor="let marker of Marcadores"
+    [latitude]="marker.lat"
+    [longitude]="marker.lng"
+    [label]="marker.label"
+    [title]="marker.title"
+    [animation]="marker.animation"
+    (mouseOver)="mousein($event)"
+    (mouseOut) ="mouseout()"
+    (markerClick) ="mobileclick($event)"
+  >
+  </agm-marker>
+
+  <agm-info-window>
+    <span style="display:block"><b> {{ Direccion }}</b></span>
+    <span> {{Referencia}} </span>
+  </agm-info-window>
+</agm-map>

@@ -1,0 +1,153 @@
+<mat-toolbar>
+
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Enviar Pedidos</span>
+  <button mat-icon-button><mat-icon routerLink="/nuevo_pedido" *ngIf="this.userData.CodTipo!='3'" >add</mat-icon></button>
+  
+  
+</mat-toolbar>
+<div class="container" >
+  <mat-card [class.oculto]="dataSource==null">
+    <mat-card-content >
+      <mat-form-field style="width: 75%">
+        <mat-label>Buscar clientes</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juan Perez">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <a mat-raised-button matSuffix href='/#/ver_pedidos_map/0' style="margin-left:10px">
+        <mat-icon>pin_drop</mat-icon>
+      </a>
+
+      <table mat-table [dataSource]="dataSource" style="width:100%" matSort>
+        
+        <!-- numero -->
+        <ng-container matColumnDef="Nro">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header style='width: 25px; padding-left: 5px;'> Nro </th>
+          <td mat-cell *matCellDef="let element"> 
+      
+            <mat-checkbox 
+              class="checksel" 
+              (change)="onSeleccionar(element.Id, element.Cantidad, element.CantidadPaq, $event.checked)" 
+              color="primary"
+            > 
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Cliente -->
+        <ng-container matColumnDef="Cliente">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Cliente </th>
+          <td mat-cell *matCellDef="let element"  style="cursor:pointer" > 
+            <span class="cliente_celda">
+              <b style='color:black'>
+              {{element.Cliente}}
+              ({{element.Cantidad}} Bot - {{element.Precio}} + {{element.CantidadPaq}} Paq - {{element.PrecioPaq}})
+            </b>
+            </span>
+            <span class="cliente_celda" *ngIf='element.Cliente!="Anónimo"'> {{element.Direccion}} ({{element.Referencia}})</span>
+            <span class="cliente_celda" *ngIf='element.Cliente=="Anónimo"'> {{element.Comentario}}</span>
+
+            <span class="subcelda" *ngIf="element.Comentario!=' ' && element.Cliente !='Anónimo'" > {{element.Comentario}}</span>
+          </td>
+        </ng-container>
+        
+        <!-- Fecha Entrega -->
+        <ng-container matColumnDef="Fecha">
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header> Fecha Entrega </th>
+          <td mat-cell *matCellDef="let element"  style="cursor:pointer" > 
+            <span class="cliente_celda"> {{element.FechaPide}}</span>
+            <span class="subcelda"> {{element.HoraPide}}</span>
+          </td>
+        </ng-container>
+
+        <!-- Usuario Registra -->
+        <ng-container matColumnDef="Usuario">
+          <th  class ="no_mobile" mat-header-cell *matHeaderCellDef  mat-sort-header> Usuario </th>
+          <td  class ="no_mobile" mat-cell *matCellDef="let element"  style="cursor:pointer" > 
+              {{element.Usuario}}
+          </td>
+        </ng-container>
+      
+        <!-- Borrar y editar -->
+        <ng-container matColumnDef="Borrar" >
+          <th mat-header-cell *matHeaderCellDef  mat-sort-header style="width: 50px;">{{onGetData() | number }}bot <br> {{onGetPaq() | number}}paq </th>
+          <td mat-cell *matCellDef="let element" > 
+            <button mat-icon-button (click)="onDelPedido(element.Id)" *ngIf="EsRoot">
+              <mat-icon>highlight_off</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="onEditPedido(element)" *ngIf="EsRoot">
+              <mat-icon>info</mat-icon>
+            </button>
+            
+          </td>
+        </ng-container>
+       
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+
+    <mat-card-footer>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" [pageSize]="50" showFirstLastButtons></mat-paginator>
+      
+    </mat-card-footer>
+    <mat-card-actions style="text-align: center;" *ngIf="this.userData.CodTipo!='3'">
+      <form [formGroup]="EnviarForm">
+        
+        <!-- 11.06.2023 - check para registrar envio parcial -->
+        <input type="checkbox" id="cPedParcial" name="cPedParcial" value="pedidoparcial" value="Bike" (change)="onSelPedidoParcial()" [hidden]='Pedidos_sel.length!=1'>
+        <label for="cPedParcial"> Envio Parcial: </label>
+
+        <!-- <mat-checkbox color="primary" value="pedidoparcial" (change)="onSelPedidoParcial()"  [hidden]='Pedidos_sel.length!=1'> Envío parcial: 
+        </mat-checkbox> -->
+
+        <mat-form-field>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-label>Repartidor</mat-label>
+          <mat-select formControlName="Usuario" placeholder="Repartidor" >
+            <mat-option *ngFor="let op of Repartidores" [value]="op.Id" >
+              {{op.Usuario}}
+            </mat-option>
+          </mat-select>  
+        </mat-form-field>
+
+        <mat-form-field style='max-width:60px'>
+          <mat-label>Bot.</mat-label>
+          <mat-select placeholder="Cantidad" style='text-align:center' [(value)]='total_envio'  [disabled]="!pedidoparcial" >
+            <mat-option *ngFor="let op of numeros" [value]="op" >
+              {{op}}
+            </mat-option>
+          </mat-select> 
+          <!-- <input matInput placeholder="Cantidad" style='text-align:center' [value]='total_envio' readonly> -->
+        </mat-form-field>
+
+        <mat-form-field style='max-width:60px'>
+          <mat-label>Paq.</mat-label>
+          <mat-select placeholder="CantidadPaq" style='text-align:center' [(value)]='total_envio_paq'  [disabled]="!pedidoparcial" >
+            <mat-option *ngFor="let op of numeros" [value]="op" >
+              {{op}}
+            </mat-option>
+          </mat-select> 
+          <!-- <input matInput placeholder="CantidadPaq" style='text-align:center' [value]='total_envio_paq' readonly> -->
+        </mat-form-field>
+        
+        <button mat-raised-button class="aceptar" (click)='onEnviarPedido()' [disabled]="this.EnviarForm.controls.Usuario.value==null || Pedidos_sel.length==0 " >        
+        <mat-icon>local_shipping</mat-icon>
+        Enviar
+      </button>
+    </form>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card *ngIf="dataSource==null">
+    <mat-card-header>
+      <mat-card-title>No se encuentran Pedidos</mat-card-title>
+      <mat-card-subtitle>Actualmente el sistema no tiene registrado ningun pedido.</mat-card-subtitle>
+    </mat-card-header>
+  
+  </mat-card>
+
+
+</div>

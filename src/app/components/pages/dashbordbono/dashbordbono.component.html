@@ -1,0 +1,71 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Seguimiento de Metas</span>
+</mat-toolbar>
+
+<div class="container" >
+  <mat-card>
+    <div class="container-cab">
+      <div class="title">
+        <h1>{{ nombreVendedor }} </h1>
+
+        <form [formGroup]="PeriodoForm">
+          <mat-form-field style="font-size: 14px;"> 
+            <mat-label>Periodo</mat-label>
+            <mat-select formControlName="sel_periodo" placeholder="Periodo" (ngModelChange)="CargarMetas()" >
+              <!-- (ngModelChange)="CargarMetas()" -->
+              <mat-option *ngFor="let op of PeriodosVendedor" [value]="op.Id" >
+              {{op.Periodo}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="avatar">
+        <img src="{{url_avatar}} " alt="Avatar del Vendedor" *ngIf="ExisteAvatar" >
+        <img src="assets/users.png" alt="Avatar del Vendedor" *ngIf="!ExisteAvatar">
+      </div>
+  </div>
+</mat-card>
+
+  <mat-card>
+    <div class="padre">
+      <div class="TxtMeta">
+        <div class="alcanzado"> {{Seg.VentaTotal}} </div>
+        <div class="linea"></div>
+        <div class="meta"> {{Seg.MetaVentas}} </div>
+        <mat-icon style="color: #CD7F32;">emoji_events</mat-icon>
+      </div>
+
+      <canvas  id="ChartBonoVenta" style="max-height: 200px;">{{ ChartBonoVenta }}</canvas>
+      <div class="lblbono">
+    <span> Bono de Venta:</span> <b> S/ {{Seg.BonoVentas }}  ({{ (Seg.CumplimientoVenta * 100).toFixed(2) }}% )</b>  <br>
+    <span> Bono Plus </span> <b> S/ {{ (Seg.BonoPlus).toFixed(2) }} (5% de {{Seg.MontoBonoPlus }} ) </b>  
+    <br>
+    <button mat-button (click)="irdetalleventa()">ver detalle</button>
+    
+    </div>
+  </div>
+  </mat-card>
+
+  <mat-card style="margin-top: 12px;">
+    <div class="padre">
+      <div class="TxtMeta">
+        <div class="alcanzado"> {{Seg.ClientesActivos}} </div>
+        <div class="linea"></div>
+        <div class="meta"> {{Seg.MetaClientes}} </div>
+        <mat-icon style="color: #EC8A23;">emoji_events</mat-icon>
+      </div>
+
+      <canvas  id="ChartBonoClientes" style="max-height: 200px;">{{ ChartBonoClientes }}</canvas>
+      <div class="lblbono">
+        <span> Bono de Clientes </span> <b>{{ ((Seg.ClientesActivos / Seg.MetaClientes) * 100).toFixed(2) }}% </b>
+      </div>
+      <br>
+      <button mat-button style="display: block;
+      margin: auto;" (click)="irdetalleclientes()">ver detalle</button>
+  </div>
+  </mat-card>
+</div>
+

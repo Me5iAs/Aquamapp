@@ -1,0 +1,193 @@
+<mat-toolbar>
+  <!-- <mat-icon>verified_user</mat-icon> -->
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">Cierre de Caja</span>
+  
+  
+  
+
+</mat-toolbar>
+
+<div class="container" *ngIf="cuadrehecho" >
+  <mat-card>
+    <mat-card-content>
+      <h2>El cierre de este día ya fue ejecutado</h2>
+      <p>Si desea volver a hacer el cierre, el administrador o el root deben habilitar hacer un nuevo el cierre</p>
+
+      <table style="max-width: 300px; margin:auto" border ="1"  *ngIf="DatosCierre.length>0">
+        <tr><td>Fecha</td><td style="text-align: right;">{{DatosCierre[0].Fecha}} </td></tr>
+        <tr><td>Hora</td><td style="text-align: right;">{{DatosCierre[0].Hora}} </td></tr>
+        <tr><td>Operaciones</td><td style="text-align: right;">{{DatosCierre[0].Operaciones}} </td></tr>
+        <tr><td>Conteo</td><td style="text-align: right;">{{DatosCierre[0].Conteo}} </td></tr>
+        <tr><td>Diferencia</td><td style="text-align: right;">{{DatosCierre[0].Diferencia}} </td></tr>
+        <tr><td>Usuario</td><td style="text-align: right;">{{DatosCierre[0].Usuario}} </td></tr>
+      </table>
+
+      <div style="text-align: center; margin-top: 10px;">
+        <button mat-raised-button *ngIf="EsRoot" (click)="onRevertirCierre()" mat-button color="primary">Revertir Cierre</button>
+      </div>
+      
+      <!-- 'EsRoot' -->
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container" *ngIf="!cuadrehecho">
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="CuadreForm" >
+
+
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="onConteo" hideToggle>
+            
+            <mat-expansion-panel-header>
+              <mat-panel-description>Conteo de Biletes y Monedas</mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <table  style="margin: auto; width: auto;">
+              <tr>
+                <th style="width:100px;">Denominacion</th>
+                <th style="width:75px;">Cantidad</th>
+                <th style="width:100px;">Total S/</th>
+                <th rowspan="12"></th>
+              </tr>
+              <tr>
+                <td>S/ 200</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;" placeholder="200" formControlName="s200"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s200.value * 200).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 100</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="100" formControlName="s100"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s100.value * 100).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 50</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="50" formControlName="s50"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s50.value * 50).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 20</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="20" formControlName="s20"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s20.value * 20).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 10</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="10" formControlName="s10"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s10.value * 10).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 5</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="5" formControlName="s5"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s5.value * 5).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 2</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="2" formControlName="s2"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s2.value * 2).toFixed(2)}} </td>
+              </tr>            
+              <tr>
+                <td>S/ 1</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="1" formControlName="s1"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s1.value * 1).toFixed(2)}} </td>
+              </tr>          
+              <tr>
+                <td>S/ 050</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="0.50" formControlName="s050"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s050.value * 0.5).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 020</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="0.20" formControlName="s020"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s020.value * 0.2).toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td>S/ 010</td>
+                
+                <td><input type="number" [readonly]="!onConteo" min="0" style="max-width: 65px;"  placeholder="0.10" formControlName="s010"></td>
+                <td style="text-align:right">{{(CuadreForm.controls.s010.value * 0.1).toFixed(2)}} </td>
+              </tr>
+              <tr style="font-weight:bold">
+                <td colspan=2>Total</td>
+                <td style="text-align:right">
+                  {{
+                    (
+                      CuadreForm.controls.s200.value * 200 +
+                      CuadreForm.controls.s100.value * 100 +
+                      CuadreForm.controls.s50.value * 50 +
+                      CuadreForm.controls.s20.value * 20 +
+                      CuadreForm.controls.s10.value * 10 +
+                      CuadreForm.controls.s5.value * 5 +
+                      CuadreForm.controls.s2.value * 2 +
+                      CuadreForm.controls.s1.value * 1 +
+                      CuadreForm.controls.s050.value * 0.5 +
+                      CuadreForm.controls.s020.value * 0.2 +
+                      CuadreForm.controls.s010.value * 0.1
+                    
+                    ).toFixed(2)
+
+
+                  }}
+                </td>
+                <td>
+                  <button mat-raised-button [disabled]="!onConteo" (click)="onRegistrarConteo(CuadreForm.value)" mat-button color="primary">Reg. Conteo</button>
+                </td>
+              </tr>
+            </table>
+
+          </mat-expansion-panel>
+
+          <mat-expansion-panel [expanded]="!onConteo"  *ngIf="!onConteo" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-description>Cuadre de Caja</mat-panel-description>
+            </mat-expansion-panel-header>
+            <table style="margin: auto; width: auto;">
+              <tr>
+                <th style="width:230px;">Descripción</th>
+                <th style="width:75px;">Monto</th>
+                <!-- <th style="width:100px;">Tipo</th> -->
+              </tr>
+              <tr *ngFor="let op of resumen">
+                <td>{{op.Descripcion}}</td>
+               
+                <td *ngIf="op.Tipo=='Ingresos'" style=" text-align: right; color: green;">{{op.Monto}}</td>
+                <td *ngIf="op.Tipo=='Gastos'" style=" text-align: right; color: red;">{{op.Monto}}</td>
+                <td *ngIf="op.Tipo==''" style=" font-weight: bold; text-align: right; color:blue;">{{op.Monto}}</td>
+                <!-- <td>{{op.Tipo}}</td> -->
+              </tr>
+         
+              <tr>
+                <td >Total Operaciones</td>
+                <td style="border-top: 2px solid #000; text-align: right;">{{TotalOperacion.toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td >Total Conteo</td>
+                <td style=" text-align: right;">{{TotalConteo.toFixed(2)}} </td>
+              </tr>
+              <tr>
+                <td *ngIf="(TotalConteo - TotalOperacion) > 0">Sobrante</td>
+                <td *ngIf="(TotalConteo - TotalOperacion) < 0">Faltante</td>
+                <td *ngIf="(TotalConteo - TotalOperacion) == 0">Cuadre</td>
+
+                <td *ngIf="(TotalConteo - TotalOperacion) < 0" style="border-top: 2px solid #000; color: red; text-align: right;">{{(TotalConteo - TotalOperacion).toFixed(2)}} </td>
+                <td *ngIf="(TotalConteo - TotalOperacion) >= 0"style="border-top: 2px solid #000; color:green; text-align: right;">{{(TotalConteo - TotalOperacion).toFixed(2)}} </td>
+              </tr>
+            </table>
+        </mat-expansion-panel>
+        </mat-accordion>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

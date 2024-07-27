@@ -1,0 +1,29 @@
+<mat-toolbar>
+  <button mat-icon-button><mat-icon routerLink="/" >home</mat-icon></button>
+  <span style="flex: 1 1 auto; text-align: center;">
+    <mat-icon class="tab-icon">map</mat-icon>
+    Mapa de Pedidos
+  </span>
+</mat-toolbar>
+
+
+<div class="container" >
+  <mat-card>
+    <mat-tab-group mat-align-tabs="start" >
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">map</mat-icon>
+          Mapa de Pedidos
+        </ng-template>
+          <div id="map"></div>
+          <div style="text-align: center;">
+          <button mat-stroked-button color="primary" (click)="toggleRouteDetails()">Mostrar/Ocultar Detalles</button>
+          <button mat-stroked-button color="primary" (click)="mostrarInstrucciones()"> Mostrar Instrucciones </button>
+          </div>
+        </mat-tab>
+
+    </mat-tab-group>
+    
+  </mat-card>
+</div>
+
