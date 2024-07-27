@@ -19,7 +19,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from "../../format-datepicker";
 import { api } from 'src/app/services/g-constantes.service';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-mapapedidos',
@@ -58,7 +58,8 @@ export class MapapedidosComponent implements AfterViewInit {
   constructor(
     private gQuery: gQueryService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -100,6 +101,12 @@ export class MapapedidosComponent implements AfterViewInit {
 
     this.gQuery.sql("sp_pedidos_enviados_no_reportados", UsuarioI.Id).subscribe((data: any[]) => {
       target.style.display = "none";
+      if (data == null) {
+        this.dataSource = null;
+        alert("no se encuentran pedidos");
+        this.location.back();
+        return;
+      }
       this.setupTable(data);
       this.setupMap();
       // this.addMarkers();
@@ -113,6 +120,9 @@ export class MapapedidosComponent implements AfterViewInit {
   private setupTable(data: any[]): void {
     if (data == null) {
       this.dataSource = null;
+      alert("no se encuentran pedidos");
+      this.location.back();
+
     } else {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
@@ -603,6 +613,8 @@ export class MapapedidosComponent implements AfterViewInit {
         // console.log(res);
         target.style.display = "none"
         alert("Rechazo registrado")
+        location.reload();
+        // this.initMap();
         // this.CargarPedidos()
       });
   }
@@ -708,7 +720,7 @@ export class DialogInstrucciones implements OnInit {
       t += item["Tiempo"];
       d += item["Distancia"];
     })
-    console.log("tiempo: " + t + ", distancia: " + d );
+    // console.log("tiempo: " + t + ", distancia: " + d );
     
     this.HoraLlegada = this.calcularHoraLlegada(this.Data[1], t)
     const hours = Math.floor(t / 3600);
@@ -716,10 +728,11 @@ export class DialogInstrucciones implements OnInit {
     const secs = t % 60;
 
     if (hours > 0) {
-        this.Tiempo = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} h`;
-    } else {
-        this.Tiempo = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} min`;
-    }
+      this.Tiempo = `${Math.floor(hours).toString().padStart(2, '0')}:${Math.floor(minutes).toString().padStart(2, '0')} h`;
+  } else {
+      this.Tiempo = `${Math.floor(minutes).toString().padStart(2, '0')}:${Math.floor(secs).toString().padStart(2, '0')} min`;
+  }
+  
 
     this.Distancia = (d / 1000).toFixed(2) + " km."
   }

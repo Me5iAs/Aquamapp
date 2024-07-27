@@ -1,5 +1,5 @@
-// const base = "http://localhost/aquamapp/";
-const base = "backend/";
+const base = "http://localhost/aquamapp/";
+// const base = "backend/";
 // 
 export class api {    
 
